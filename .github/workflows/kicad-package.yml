@@ -30,6 +30,9 @@ jobs:
       - name: Checkout any required tools, setup build environment variables
         run: ./build.ps1 -Env -Arch x64
 
+      - name: Rebuilds vcpkg dependencies
+        run: ./build.ps1 -Vcpkg -Latest -Arch x64
+
       - name: Triggers a build
         run: ./build.ps1 -Build -Latest -Arch x64 -BuildType Release
 
