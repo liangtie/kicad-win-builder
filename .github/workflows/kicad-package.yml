@@ -24,6 +24,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Configure
+        run: ./build.ps1 -Config -UseMsvcCmake $False
+
       - name: Checkout any required tools
         run: ./build.ps1 -Init
 
