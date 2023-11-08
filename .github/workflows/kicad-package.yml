@@ -2,7 +2,7 @@
 # This is a workflow to generate the zip file and metadata.json for KiCAD PCM
 # https://gitlab.com/kicad/addons/metadata/-/merge_requests/14
 
-name: KiCAD PCM packaging
+name: KiCAD client packaging
 on: # yamllint disable-line rule:truthy
   release:
     branches: [main]
