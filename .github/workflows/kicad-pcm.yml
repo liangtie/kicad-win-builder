@@ -1,0 +1,55 @@
+---
+# This is a workflow to generate the zip file and metadata.json for KiCAD PCM
+# https://gitlab.com/kicad/addons/metadata/-/merge_requests/14
+
+name: KiCAD PCM packaging
+on: # yamllint disable-line rule:truthy
+  release:
+    branches: [main]
+    types:
+      - published
+  workflow_dispatch:
+
+jobs:
+  create_archive:
+    runs-on: windows-latest
+    steps:
+      - name: Get latest tag
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: Liangtie/kicad-amf-plugin
+          releases-only: true
+        id: latest-release
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Checkout any required tools
+        run: ./build.ps1 -Init
+
+      - name: Checkout any required tools, setup build environment variables
+        run: ./build.ps1 -Env [-Arch x64]
+
+      - name: Triggers a build
+        run: ./build.ps1 -Build [-Latest] [-Arch x64] [-BuildType Release]
+
+      - name: Triggers a package operation
+        run: ./build.ps1 -PreparePackage [-Arch x64] [-BuildType Release] [-Lite] [-IncludeDebugSymbols]
+
+      - name: Triggers a package operation Nsis
+        run: ./build.ps1 -Package [-PackType Nsis] [-Arch x64] [-BuildType Release] [-Lite] [-IncludeDebugSymbols]
+
+      - name: Triggers a msix assets generation
+        run: ./build.ps1 -MsixAssets
+
+      - name: Show the dir content
+        run: ls -R
+
+      # - name: Upload zip as asset to release
+      #   uses: svenstaro/upload-release-action@v2
+      #   with:
+      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+      #     file: ./PCM/KiCAD-PCM-${{ steps.latest-release.outputs.tag }}.zip
+      #     asset_name: KiCAD-PCM-${{ steps.latest-release.outputs.tag }}.zip
+      #     overwrite: true
+      #     tag: ${{ steps.latest-release.outputs.tag }}
