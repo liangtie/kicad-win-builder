@@ -36,6 +36,14 @@ jobs:
       - name: Rebuilds vcpkg dependencies
         run: ./build.ps1 -Vcpkg -Latest -Arch x64
 
+      - name: Cache Packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            .build
+            .downloads
+            .support
+
       - name: Triggers a build
         run: ./build.ps1 -Build -Latest -Arch x64 -BuildType Release
 
