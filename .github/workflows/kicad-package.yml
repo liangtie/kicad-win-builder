@@ -17,7 +17,7 @@ jobs:
       - name: Get latest tag
         uses: oprypin/find-latest-tag@v1
         with:
-          repository: Liangtie/kicad
+          repository: Liangtie/kicad-amf-plugin
           releases-only: true
         id: latest-release
 
