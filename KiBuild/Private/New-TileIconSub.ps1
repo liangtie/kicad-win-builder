@@ -2,8 +2,6 @@
 
 $imageHelper = @"
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 
 public class ImageHelper
 {
