@@ -7,7 +7,7 @@ public class ImageHelper
 {
     public static void TilizeIcon(string sourcePath, int finalWidth, int finalHeight, string finalPath)
     {
-        File.Copy(sourcePath,finalPath)
+        File.Copy(sourcePath,finalPath);
     }
 }
 "@
