@@ -5,7 +5,7 @@
 name: KiCAD client packaging
 on: # yamllint disable-line rule:truthy
   release:
-    branches: [main]
+    branches: main
     types:
       - published
   workflow_dispatch:
@@ -17,7 +17,7 @@ jobs:
       - name: Get latest tag
         uses: oprypin/find-latest-tag@v1
         with:
-          repository: Liangtie/kicad-amf-plugin
+          repository: Liangtie/kicad
           releases-only: true
         id: latest-release
 
@@ -28,19 +28,16 @@ jobs:
         run: ./build.ps1 -Init
 
       - name: Checkout any required tools, setup build environment variables
-        run: ./build.ps1 -Env [-Arch x64]
+        run: ./build.ps1 -Env -Arch x64
 
       - name: Triggers a build
-        run: ./build.ps1 -Build [-Latest] [-Arch x64] [-BuildType Release]
+        run: ./build.ps1 -Build -Latest -Arch x64 -BuildType Release
 
       - name: Triggers a package operation
-        run: ./build.ps1 -PreparePackage [-Arch x64] [-BuildType Release] [-Lite] [-IncludeDebugSymbols]
+        run: ./build.ps1 -PreparePackage  -Arch x64   -BuildType Release
 
       - name: Triggers a package operation Nsis
-        run: ./build.ps1 -Package [-PackType Nsis] [-Arch x64] [-BuildType Release] [-Lite] [-IncludeDebugSymbols]
-
-      - name: Triggers a msix assets generation
-        run: ./build.ps1 -MsixAssets
+        run: ./build.ps1 -Package  -PackType Nsis   -Arch x64   -BuildType Release
 
       - name: Show the dir content
         run: ls -R

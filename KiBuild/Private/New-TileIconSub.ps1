@@ -77,7 +77,7 @@
 #         $iconHeight = $finalHeight*0.50
 #         $iconDim = [math]::Min($iconHeight,$iconWidth)
 #         $iconDim = [math]::Round($iconDim, 0)
-        
+
 #         Convert-Svg -Svg $svg -Width $iconDim -Height $iconDim -Out $out
 #         [ImageHelper]::TilizeIcon($out, $finalWidth, $finalHeight, $out)
 #     }
