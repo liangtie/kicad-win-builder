@@ -2,17 +2,43 @@
 
 $imageHelper = @"
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Common;
 
 public class ImageHelper
 {
     public static void TilizeIcon(string sourcePath, int finalWidth, int finalHeight, string finalPath)
     {
-        File.Copy(sourcePath,finalPath);
+        using (var finalImage = new Bitmap(finalWidth, finalHeight))
+        {
+            using (var source = new Bitmap(sourcePath))
+            {
+                if(source.Width > finalWidth)
+                {
+                    throw new ArgumentOutOfRangeException("Source width is larger than the final width");
+                }
+
+                if (source.Height > finalHeight)
+                {
+                    throw new ArgumentOutOfRangeException("Source height is larger than the final height");
+                }
+
+                using (Graphics g = Graphics.FromImage(finalImage))
+                {
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    g.DrawImage(source, (finalWidth-source.Width)/2, (finalHeight-source.Height)/2, source.Width, source.Height);
+                }
+            }
+
+            finalImage.Save(finalPath, ImageFormat.Png);
+        }
     }
 }
 "@
 
-$assemblies = ("System.Drawing", "System.Drawing.Primitives", "System.Runtime")
+$assemblies = ("System.Drawing", "System.Drawing.Primitives", "System.Runtime", "System.Drawing.Common")
 Add-Type -ReferencedAssemblies $assemblies -TypeDefinition $imageHelper -Language CSharp -IgnoreWarnings
 function New-TileIconSub {
     <#
