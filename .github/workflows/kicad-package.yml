@@ -43,6 +43,9 @@ jobs:
             .build
             .downloads
             .support
+            vcpkg
+            msys64
+            msys32
 
       - name: Triggers a build
         run: ./build.ps1 -Build -Latest -Arch x64 -BuildType Release
