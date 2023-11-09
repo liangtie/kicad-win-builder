@@ -99,7 +99,7 @@ param(
     [Parameter(Mandatory=$False, ParameterSetName="vcpkg")]
     [Parameter(Mandatory=$False, ParameterSetName="package")]
     [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
-    [string]$BuildConfigName = 'kicad-nightly',
+    [string]$BuildConfigName = 'kicad-7.0.9',
 
     [Parameter(Mandatory=$False, ParameterSetName="build")]
     [Parameter(Mandatory=$False, ParameterSetName="package")]
@@ -117,7 +117,7 @@ param(
     [Parameter(Mandatory=$False, ParameterSetName="package")]
     [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
     [switch]$Lite,
-    
+
     [Parameter(Mandatory=$False, ParameterSetName="package")]
     [bool]$Prepare = $True,
     
