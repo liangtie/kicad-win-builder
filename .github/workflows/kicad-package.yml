@@ -40,6 +40,7 @@ jobs:
         uses: actions/cache@v3
         with:
           key: package_downloaed
+          restore-keys: package_downloaed
           path: |
             .build
             .downloads
@@ -52,6 +53,7 @@ jobs:
         uses: actions/cache@v3
         with:
           key: vcpkg_cache
+          restore-keys: vcpkg_cache
           path: |
             vcpkg
             msys64
