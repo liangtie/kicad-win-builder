@@ -51,118 +51,118 @@
 ##
 
 param(
-    [Parameter(Position = 0, Mandatory=$True, ParameterSetName="config")]
+    [Parameter(Position = 0, Mandatory = $True, ParameterSetName = "config")]
     [Switch]$Config,
 
-    [Parameter(Position = 0, Mandatory=$True, ParameterSetName="init")]
+    [Parameter(Position = 0, Mandatory = $True, ParameterSetName = "init")]
     [Switch]$Init,
 
-    [Parameter(Position = 0, Mandatory=$True, ParameterSetName="env")]
+    [Parameter(Position = 0, Mandatory = $True, ParameterSetName = "env")]
     [Switch]$Env,
 
-    [Parameter(Position = 0, Mandatory=$True, ParameterSetName="build")]
+    [Parameter(Position = 0, Mandatory = $True, ParameterSetName = "build")]
     [Switch]$Build,
 
-    [Parameter(Position = 0, Mandatory=$True, ParameterSetName="vcpkg")]
+    [Parameter(Position = 0, Mandatory = $True, ParameterSetName = "vcpkg")]
     [Switch]$Vcpkg,
 
-    [Parameter(Position = 0, Mandatory=$True, ParameterSetName="package")]
+    [Parameter(Position = 0, Mandatory = $True, ParameterSetName = "package")]
     [Switch]$Package,
     
-    [Parameter(Position = 0, Mandatory=$True, ParameterSetName="preparepackage")]
+    [Parameter(Position = 0, Mandatory = $True, ParameterSetName = "preparepackage")]
     [Switch]$PreparePackage,
 
-    [Parameter(Position = 0, Mandatory=$True, ParameterSetName="msixassets")]
+    [Parameter(Position = 0, Mandatory = $True, ParameterSetName = "msixassets")]
     [Switch]$MsixAssets,
 
-    [Parameter(Mandatory=$True, ParameterSetName="msixassets")]
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
+    [Parameter(Mandatory = $True, ParameterSetName = "msixassets")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
     [string]$Version,
 
-    [Parameter(Mandatory=$False, ParameterSetName="build")]
-    [Parameter(Mandatory=$False, ParameterSetName="vcpkg")]
+    [Parameter(Mandatory = $False, ParameterSetName = "build")]
+    [Parameter(Mandatory = $False, ParameterSetName = "vcpkg")]
     [Switch]$Latest,
 
-    [Parameter(Mandatory=$False, ParameterSetName="env")]
-    [Parameter(Mandatory=$False, ParameterSetName="build")]
-    [Parameter(Mandatory=$False, ParameterSetName="vcpkg")]
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "env")]
+    [Parameter(Mandatory = $False, ParameterSetName = "build")]
+    [Parameter(Mandatory = $False, ParameterSetName = "vcpkg")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [ValidateSet('x86', 'x64', 'arm64', 'arm')]
     [string]$Arch = 'x64',
 
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
     [ValidateSet('nsis', 'msix')]
     [string]$PackType = 'nsis',
     
-    [Parameter(Mandatory=$False, ParameterSetName="build")]
-    [Parameter(Mandatory=$False, ParameterSetName="vcpkg")]
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
-    [string]$BuildConfigName = 'kicad-7.0.9',
+    [Parameter(Mandatory = $False, ParameterSetName = "build")]
+    [Parameter(Mandatory = $False, ParameterSetName = "vcpkg")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
+    [string]$BuildConfigName = 'kicad-7.0.8',
 
-    [Parameter(Mandatory=$False, ParameterSetName="build")]
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "build")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [ValidateSet('Release', 'Debug')]
     [string]$BuildType = 'Release',
 
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
     [switch]$DebugSymbols,
 
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [switch]$IncludeVcpkgDebugSymbols,
 
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [switch]$Lite,
 
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
     [bool]$Prepare = $True,
     
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [switch]$Sign,
     
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [bool]$SignAKV = $False,
     
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [string]$AKVAppId = "",
 
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [string]$AKVAppSecret = "",
 
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [string]$AKVTenantId = "",
 
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [string]$AKVCertName = "",
 
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [string]$AKVUrl = "",
     
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
     [bool]$PostCleanup = $False,
     
-    [Parameter(Mandatory=$False, ParameterSetName="package")]
-    [Parameter(Mandatory=$False, ParameterSetName="preparepackage")]
+    [Parameter(Mandatory = $False, ParameterSetName = "package")]
+    [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
     [bool]$SentryArtifact = $False,
     
-    [Parameter(Mandatory=$False, ParameterSetName="config")]
+    [Parameter(Mandatory = $False, ParameterSetName = "config")]
     [string]$VcpkgPath = "",
     
-    [Parameter(Mandatory=$False, ParameterSetName="config")]
+    [Parameter(Mandatory = $False, ParameterSetName = "config")]
     [bool]$UseMsvcCmake = $True,
     
-    [Parameter(Mandatory=$False, ParameterSetName="config")]
+    [Parameter(Mandatory = $False, ParameterSetName = "config")]
     [string]$SentryDsn = ""
 )
 
@@ -223,14 +223,14 @@ $nsisPath = Join-Path -Path (Join-Path -Path $BuilderPaths.SupportRoot -ChildPat
 $azureSignToolVersion = "3.0.0"
 $azureSignToolPath = Join-Path -Path $BuilderPaths.SupportRoot -ChildPath "azuresigntool-$azureSignToolVersion"
 
-$env:Path = $swigWinPath+";"+$gettextPath+";"+$nsisPath+";"+$doxygenPath+";"+$env:PATH
+$env:Path = $swigWinPath + ";" + $gettextPath + ";" + $nsisPath + ";" + $doxygenPath + ";" + $env:PATH
 
 
 # Use TLS1.2 by force in case of older powershell
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 # Force git output to go to stdout or else powershell eats it and doesn't show us it
-$env:GIT_REDIRECT_STDERR='2>&1'
+$env:GIT_REDIRECT_STDERR = '2>&1'
 
 
 ###
@@ -239,13 +239,13 @@ $env:GIT_REDIRECT_STDERR='2>&1'
 $settingsPath = Join-Path -Path $PSScriptRoot -ChildPath "settings.json"
 
 $settingDefault = @{
-    VcpkgPath = ''
+    VcpkgPath            = ''
     VcpkgPlatformToolset = 'v142'
-    VsVersionMin = '16.0'
-    VsVersionMax = '17.99'
-    SignSubjectName = 'KiCad Services Corporation'
-    UseMsvcCmake = $True
-    SentryDsn = ''
+    VsVersionMin         = '16.0'
+    VsVersionMax         = '17.99'
+    SignSubjectName      = 'KiCad Services Corporation'
+    UseMsvcCmake         = $True
+    SentryDsn            = ''
 }
 
 $settingsSaved = @{}
@@ -260,7 +260,8 @@ if ( Test-Path $settingsPath ) {
         Write-Host "$($_.Name): $($_.Value)"
     }
     Write-Host "-----"
-} else {
+}
+else {
     Write-Host "Existing settings not found" -ForegroundColor DarkYellow
 }
 
@@ -273,7 +274,7 @@ $buildConfigured = $false
 $buildConfig = @{}
 $buildConfigsPath = Join-Path -Path $PSScriptRoot -ChildPath "\build-configs"
 
-if( $BuildConfigName ) {
+if ( $BuildConfigName ) {
     $buildConfigPath = Join-Path -Path $buildConfigsPath -ChildPath "$BuildConfigName.json"
     
     if ( -Not (Test-Path $buildConfigPath) ) {
@@ -299,71 +300,59 @@ $env:VCPKG_PLATFORM_TOOLSET = $settings.VcpkgPlatformToolset
 # Setup aliases to shorten accessing tools
 ##
 
-function Set-Aliases()
-{
+function Set-Aliases() {
     Write-Host "Configuring tool aliases"
-    if( -not (Test-Path alias:vcpkg ) )
-    {
-        if( $settings.VcpkgPath -ne "" )
-        {
+    if ( -not (Test-Path alias:vcpkg ) ) {
+        if ( $settings.VcpkgPath -ne "" ) {
             $tmp = Join-Path -Path $settings.VcpkgPath -ChildPath "vcpkg.exe"
             Set-Alias vcpkg $tmp -Option AllScope -Scope Global
         }
     }
 
-    if( -not (Test-Path alias:vswhere ) )
-    {
+    if ( -not (Test-Path alias:vswhere ) ) {
         $tmp = Join-Path -Path $BuilderPaths.SupportRoot -ChildPath "vswhere.exe"
         Set-Alias vswhere $tmp -Option AllScope -Scope Global
     }
     
-    if( -not $settings.UseMsvcCmake )
-    {
-        if( -not (Test-Path alias:cmake ) )
-        {
+    if ( -not $settings.UseMsvcCmake ) {
+        if ( -not (Test-Path alias:cmake ) ) {
             $cmakeBin = Join-Path -Path $BuilderPaths.SupportRoot -ChildPath "$cmakeFolder/bin"
             $cmakeExe = Join-Path -Path $cmakeBin -ChildPath "cmake.exe"
-            $env:Path = $cmakeBin+";"+$env:Path;
+            $env:Path = $cmakeBin + ";" + $env:Path;
             Set-Alias cmake $cmakeExe -Option AllScope -Scope Global
         }
         
-        if( -not (Test-Path alias:ninja ) )
-        {
+        if ( -not (Test-Path alias:ninja ) ) {
             $ninjaBin = Join-Path -Path $BuilderPaths.SupportRoot -ChildPath "$ninjaFolder"
             $ninjaExe = Join-Path -Path $BuilderPaths.SupportRoot -ChildPath "$ninjaFolder/ninja.exe"
             $env:NINJA_PATH = $ninjaExe;
-            $env:Path = $ninjaBin+";"+$env:Path;
+            $env:Path = $ninjaBin + ";" + $env:Path;
             Set-Alias ninja $ninjaExe -Option AllScope -Scope Global
         }
     }
 
 
-    if( -not (Test-Path alias:makensis ) )
-    {
+    if ( -not (Test-Path alias:makensis ) ) {
         $tmp = Join-Path -Path (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $nsisFolderName) -ChildPath "bin/makensis.exe"
         Set-Alias makensis $tmp -Option AllScope -Scope Global
     }
     
-    if( -not (Test-Path alias:7za ) )
-    {
+    if ( -not (Test-Path alias:7za ) ) {
         $tmp = Join-Path -Path $BuilderPaths.SupportRoot -ChildPath "$7zaFolderName/7za.exe"
         Set-Alias 7za $tmp -Option AllScope -Scope Global
     }
 
-    if( -not (Test-Path alias:sentry-cli ) )
-    {
+    if ( -not (Test-Path alias:sentry-cli ) ) {
         $tmp = Join-Path -Path $BuilderPaths.SupportRoot -ChildPath "sentry-cli.exe"
         Set-Alias sentry-cli $tmp -Option AllScope -Scope Global
     }
     
-    if( -not (Test-Path alias:azuresigntool ) )
-    {
+    if ( -not (Test-Path alias:azuresigntool ) ) {
         $tmp = Join-Path -Path $azureSignToolPath -ChildPath "azuresigntool.exe"
         Set-Alias azuresigntool $tmp -Option AllScope -Scope Global
     }
     
-    if( -not (Test-Path alias:s5cmd ) )
-    {
+    if ( -not (Test-Path alias:s5cmd ) ) {
         $tmp = Join-Path -Path (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $s5cmdFolderName) -ChildPath "s5cmd.exe"
         Set-Alias s5cmd $tmp -Option AllScope -Scope Global
     }
@@ -383,9 +372,9 @@ function Get-Source-Path([string]$subfolder) {
 function Build-Library-Source {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('Release', 'Debug')]
         [string]$buildType = 'Release',
         [string]$libraryFolderName
@@ -425,9 +414,9 @@ function Build-Library-Source {
 function Install-Library {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('Release', 'Debug')]
         [string]$buildType = 'Release',
         [string]$libraryFolderName
@@ -459,12 +448,12 @@ function Install-Library {
 function Install-Kicad {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('Release', 'Debug')]
         [string]$buildType = 'Release',
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [string]$installPath = ''
     )
 
@@ -480,9 +469,10 @@ function Install-Kicad {
     Write-Host "Invoking cmake install" -ForegroundColor Yellow
     & {
         $ErrorActionPreference = 'SilentlyContinue'
-        if( $installPath ) {
+        if ( $installPath ) {
             cmake --install $cmakeBuildFolder --prefix $installPath > $null
-        } else {
+        }
+        else {
             cmake --install $cmakeBuildFolder > $null
         }
     }
@@ -491,7 +481,8 @@ function Install-Kicad {
         Write-Error "Failure with cmake install"
         Pop-Location
         Exit [ExitCodes]::CMakeInstallFailure
-    } else {
+    }
+    else {
         Write-Host "Install success" -ForegroundColor Green
     }
 
@@ -502,12 +493,12 @@ function Install-Kicad {
 function Build-Kicad {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('Release', 'Debug')]
         [string]$buildType = 'Release',
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$fresh = $False
     )
 
@@ -522,7 +513,7 @@ function Build-Kicad {
     $generator = "Ninja"
 
     #delete the old build folderhttps://gitlab.com/kicad/code/kicad.git
-    if($fresh) {
+    if ($fresh) {
         Remove-Item $cmakeBuildFolder -Recurse -ErrorAction SilentlyContinue
     }
 
@@ -554,9 +545,9 @@ function Build-Kicad {
         '-DKICAD_WIN32_DPI_AWARE=ON'
     )
 
-    if( $arch -ne [Arch]::arm64 ) {
+    if ( $arch -ne [Arch]::arm64 ) {
         $cmakeArgs += '-DKICAD_SCRIPTING_WXPYTHON=ON';
-        if( $settings.SentryDsn -ne "" ) {
+        if ( $settings.SentryDsn -ne "" ) {
             $cmakeArgs += '-DKICAD_USE_SENTRY=ON';
             $cmakeArgs += "-DKICAD_SENTRY_DSN=$($settings.SentryDsn)";
         }
@@ -564,7 +555,7 @@ function Build-Kicad {
     else {
         $hostArch = Get-HostArch
 
-        if( $hostArch -ne $arch ) {
+        if ( $hostArch -ne $arch ) {
             # this is a hack required to cross compile arm64
             # since lemon.exe in the build tree must be run to generate the compilable grammer
             # so you must run a native compile first
@@ -586,7 +577,8 @@ function Build-Kicad {
         Write-Error "Failure generating cmake"
         Pop-Location
         Exit [ExitCodes]::CMakeGenerationFailure
-    } else {
+    }
+    else {
         Write-Host "Invoking cmake build" -ForegroundColor Yellow
 
         & {
@@ -598,7 +590,8 @@ function Build-Kicad {
             Write-Error "Failure with cmake build"
             Pop-Location
             Exit [ExitCodes]::CMakeBuildFailure
-        } else {
+        }
+        else {
             Write-Host "Build complete" -ForegroundColor Green
         }
     }
@@ -608,8 +601,7 @@ function Build-Kicad {
 }
 
 function script:Get-Source-Ref ([string] $sourceKey) {
-    if(  $buildConfig.sources.PSObject.Properties.Match($sourceKey) )
-    {
+    if (  $buildConfig.sources.PSObject.Properties.Match($sourceKey) ) {
         return $buildConfig.sources.$sourceKey.ref
     }
     else {
@@ -620,44 +612,44 @@ function script:Get-Source-Ref ([string] $sourceKey) {
 function Start-Build {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('Release', 'Debug')]
         [string]$buildType = 'Release',
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$latest = $False
     )
 
     Get-Source -url https://gitlab.com/kicad/code/kicad.git `
-               -dest (Get-Source-Path kicad) `
-               -sourceType git `
-               -latest $latest `
-               -ref (Get-Source-Ref -sourceKey "kicad")
+        -dest (Get-Source-Path kicad) `
+        -sourceType git `
+        -latest $latest `
+        -ref (Get-Source-Ref -sourceKey "kicad")
 
     Get-Source -url https://gitlab.com/kicad/libraries/kicad-symbols.git `
-               -dest (Get-Source-Path kicad-symbols) `
-               -sourceType git `
-               -latest $latest `
-               -ref (Get-Source-Ref -sourceKey "symbols")
+        -dest (Get-Source-Path kicad-symbols) `
+        -sourceType git `
+        -latest $latest `
+        -ref (Get-Source-Ref -sourceKey "symbols")
 
     Get-Source -url https://gitlab.com/kicad/libraries/kicad-footprints.git `
-               -dest (Get-Source-Path kicad-footprints) `
-               -sourceType git `
-               -latest $latest `
-               -ref (Get-Source-Ref -sourceKey "footprints")
+        -dest (Get-Source-Path kicad-footprints) `
+        -sourceType git `
+        -latest $latest `
+        -ref (Get-Source-Ref -sourceKey "footprints")
 
     Get-Source -url https://gitlab.com/kicad/libraries/kicad-packages3D.git `
-               -dest (Get-Source-Path kicad-packages3D) `
-               -sourceType git `
-               -latest $latest `
-               -ref (Get-Source-Ref -sourceKey "3dmodels")
+        -dest (Get-Source-Path kicad-packages3D) `
+        -sourceType git `
+        -latest $latest `
+        -ref (Get-Source-Ref -sourceKey "3dmodels")
 
     Get-Source -url https://gitlab.com/kicad/libraries/kicad-templates.git `
-               -dest (Get-Source-Path kicad-templates) `
-               -sourceType git `
-               -latest $latest `
-               -ref (Get-Source-Ref -sourceKey "templates")
+        -dest (Get-Source-Path kicad-templates) `
+        -sourceType git `
+        -latest $latest `
+        -ref (Get-Source-Ref -sourceKey "templates")
 
     Build-KiCad -arch $arch -buildType $buildType
     Build-Library-Source -arch $arch -buildType $buildType -libraryFolderName kicad-symbols
@@ -671,82 +663,81 @@ function Start-Init {
     # The progress bar slows down download performance by absurd amounts, turn it off
     $ProgressPreference = 'SilentlyContinue'
 
-    if( -Not $settings.UseMsvcCmake )
-    {
+    if ( -Not $settings.UseMsvcCmake ) {
         Get-Tool -ToolName "CMake" `
-                 -Url $cmakeDownload `
-                 -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $cmakeFolder) `
-                 -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "cmake.zip") `
-                 -Checksum $cmakeChecksum `
-                 -ExtractZip $true `
-                 -ZipRelocate $False `
-                 -ExtractInSupportRoot $True
+            -Url $cmakeDownload `
+            -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $cmakeFolder) `
+            -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "cmake.zip") `
+            -Checksum $cmakeChecksum `
+            -ExtractZip $true `
+            -ZipRelocate $False `
+            -ExtractInSupportRoot $True
 
         Get-Tool -ToolName "Ninja" `
-                 -Url $ninjaDownload `
-                 -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $ninjaFolder) `
-                 -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "ninja.zip") `
-                 -Checksum $ninjaChecksum `
-                 -ExtractZip $true `
-                 -ZipRelocate $False `
-                 -ExtractInSupportRoot $False
+            -Url $ninjaDownload `
+            -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $ninjaFolder) `
+            -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "ninja.zip") `
+            -Checksum $ninjaChecksum `
+            -ExtractZip $true `
+            -ZipRelocate $False `
+            -ExtractInSupportRoot $False
     }
 
     Get-Tool -ToolName "swigwin" `
-             -Url $swigwinDownload `
-             -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $swigwinFolder) `
-             -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "$swigwinFolder.zip") `
-             -Checksum $swigwinChecksum `
-             -ExtractZip $true `
-             -ExtractInSupportRoot $True
+        -Url $swigwinDownload `
+        -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $swigwinFolder) `
+        -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "$swigwinFolder.zip") `
+        -Checksum $swigwinChecksum `
+        -ExtractZip $true `
+        -ExtractInSupportRoot $True
 
     Get-Tool -ToolName "doxygen" `
-             -Url $doxygenDownload `
-             -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $doxygenFolderName) `
-             -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "$doxygenFolderName.zip") `
-             -Checksum $doxygenChecksum `
-             -ExtractZip $true `
-             -ExtractInSupportRoot $False
+        -Url $doxygenDownload `
+        -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $doxygenFolderName) `
+        -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "$doxygenFolderName.zip") `
+        -Checksum $doxygenChecksum `
+        -ExtractZip $true `
+        -ExtractInSupportRoot $False
 
     Get-Tool -ToolName "nsis" `
-             -Url $nsisDownload `
-             -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $nsisFolderName) `
-             -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "nsis.zip") `
-             -Checksum $nsisChecksum `
-             -ExtractZip $true `
-             -ExtractInSupportRoot $True
+        -Url $nsisDownload `
+        -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $nsisFolderName) `
+        -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "nsis.zip") `
+        -Checksum $nsisChecksum `
+        -ExtractZip $true `
+        -ExtractInSupportRoot $True
 
     Get-Tool -ToolName "vswhere" `
-             -Url $vswhereDownload `
-             -DestPath ($BuilderPaths.SupportRoot+'vswhere.exe') `
-             -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "vswhere.exe") `
-             -Checksum $vswhereChecksum `
-             -ExtractZip $False
+        -Url $vswhereDownload `
+        -DestPath ($BuilderPaths.SupportRoot + 'vswhere.exe') `
+        -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "vswhere.exe") `
+        -Checksum $vswhereChecksum `
+        -ExtractZip $False
              
     Get-Tool -ToolName "sentry-cli" `
-            -Url $sentryCliDownload `
-            -DestPath ($BuilderPaths.SupportRoot+'sentry-cli.exe') `
-            -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "sentry-cli.exe") `
-            -Checksum $sentryCliChecksum `
-            -ExtractZip $False
+        -Url $sentryCliDownload `
+        -DestPath ($BuilderPaths.SupportRoot + 'sentry-cli.exe') `
+        -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "sentry-cli.exe") `
+        -Checksum $sentryCliChecksum `
+        -ExtractZip $False
 
     Get-Tool -ToolName "gettext" `
-             -Url $gettextDownload `
-             -DestPath ($BuilderPaths.SupportRoot+"$gettextFolderName/") `
-             -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "$gettextFolderName.zip") `
-             -Checksum $gettextChecksum `
-             -ExtractZip $true
+        -Url $gettextDownload `
+        -DestPath ($BuilderPaths.SupportRoot + "$gettextFolderName/") `
+        -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "$gettextFolderName.zip") `
+        -Checksum $gettextChecksum `
+        -ExtractZip $true
 
     Get-Tool -ToolName "s5cmd" `
-             -Url $s5cmdDownload `
-             -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $s5cmdFolderName) `
-             -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "s5cmd.zip") `
-             -Checksum $s5cmdChecksum `
-             -ExtractZip $true `
-             -ZipRelocate $False `
-             -ExtractInSupportRoot $False
+        -Url $s5cmdDownload `
+        -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath $s5cmdFolderName) `
+        -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "s5cmd.zip") `
+        -Checksum $s5cmdChecksum `
+        -ExtractZip $true `
+        -ZipRelocate $False `
+        -ExtractInSupportRoot $False
     
-    if( -not (Test-Path $azureSignToolPath ) ) {
+    if ( -not (Test-Path $azureSignToolPath ) ) {
         if (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue) { 
             dotnet tool install AzureSignTool --version $azureSignToolVersion --tool-path $azureSignToolPath
         }
@@ -757,8 +748,8 @@ function Start-Init {
 
     $7zaSource = Join-Path -Path $PSScriptRoot -ChildPath "\support\7z2201-extra.zip"
     Expand-Tool -ToolName "7za" `
-             -SourcePath $7zaSource `
-             -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath "$7zaFolderName/")
+        -SourcePath $7zaSource `
+        -DestPath (Join-Path -Path $BuilderPaths.SupportRoot -ChildPath "$7zaFolderName/")
 
     # Restore progress bar
     $ProgressPreference = 'Continue'
@@ -767,7 +758,7 @@ function Start-Init {
 function Get-Vcpkg-Triplet {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$Arch
     )
 
@@ -779,9 +770,9 @@ function Get-Vcpkg-Triplet {
 function Get-Build-Name {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$Arch,
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [ValidateSet('Release', 'Debug')]
         [string]$BuildType
     )
@@ -793,29 +784,30 @@ function Get-Build-Name {
 function Build-Vcpkg {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$latest = $True
     )
     
 
     $vcpkgPath = $settings["VcpkgPath"]
-    if( $vcpkgPath -eq "" ) {
+    if ( $vcpkgPath -eq "" ) {
         Write-Host "No vcpkg path provided" -ForegroundColor DarkYellow
 
         $vcpkgPath = Join-Path -Path $PSScriptRoot -ChildPath vcpkg
 
         # for now, destroy the folder if it isnt configured on our side
-        if( Test-Path $vcpkgPath ) {
+        if ( Test-Path $vcpkgPath ) {
             Remove-Item $vcpkgPath -Recurse -Force
         }
 
         Write-Host "Checking out vcpkg to $vcpkgPath" -ForegroundColor Yellow
         
-        if($buildConfig.vcpkg.manifest_mode) {
+        if ($buildConfig.vcpkg.manifest_mode) {
             git clone https://github.com/microsoft/vcpkg.git $vcpkgPath
-        } else {
+        }
+        else {
             git clone https://gitlab.com/kicad/packaging/vcpkg.git $vcpkgPath
         }
 
@@ -828,14 +820,15 @@ function Build-Vcpkg {
     # Bootstrap vcpkg
     Push-Location $vcpkgPath
 
-    if( $latest ) {
+    if ( $latest ) {
         Write-Host "Updating vcpkg git repo" -ForegroundColor Yellow
 
         git fetch
-        if($buildConfig.vcpkg.manifest_mode) {
+        if ($buildConfig.vcpkg.manifest_mode) {
             git checkout master
             git reset --hard $vcpkgCommit
-        } else {
+        }
+        else {
             git checkout kicad
             git reset --hard origin/kicad
         }
@@ -843,7 +836,7 @@ function Build-Vcpkg {
 
     .\bootstrap-vcpkg.bat
 
-    if(-Not $buildConfig.vcpkg.manifest_mode) {
+    if (-Not $buildConfig.vcpkg.manifest_mode) {
         # Setup dependencies
         $triplet = Get-Vcpkg-Triplet -Arch $arch
 
@@ -852,7 +845,7 @@ function Build-Vcpkg {
 
         # Format the dependencies with the triplet
         for ($i = 0; $i -lt $dependencies.Count; $i++) {
-            $dependencies[$i] = $dependencies[$i]+":$triplet"
+            $dependencies[$i] = $dependencies[$i] + ":$triplet"
         }
 
         vcpkg install $dependencies --recurse 2>&1
@@ -860,7 +853,8 @@ function Build-Vcpkg {
         if ($LastExitCode -ne 0) {
             Write-Error "Failure installing vcpkg ports"
             Exit [ExitCodes]::VcpkgInstallPortsFailure
-        } else {
+        }
+        else {
             Write-Host "vcpkg ports installed/updated" -ForegroundColor Green
         }
 
@@ -871,7 +865,8 @@ function Build-Vcpkg {
         if ($LastExitCode -ne 0) {
             Write-Error "Failure upgrading vcpkg ports"
             Exit [ExitCodes]::VcpkgInstallPortsFailure
-        } else {
+        }
+        else {
             Write-Host "vcpkg ports installed/updated" -ForegroundColor Green
         }
     }
@@ -892,15 +887,13 @@ function Get-KiCad-CommitHash {
 
 function Get-KiCad-PackageVersion {
 
-    if( $buildConfig.train -eq "stable" )
-    {
+    if ( $buildConfig.train -eq "stable" ) {
         return $buildConfig.package_version
     }
-    else
-    {
+    else {
         Push-Location (Get-Source-Path kicad)
     
-        $revCount = (git describe --long --tags | %{$_ -replace "-","."} )
+        $revCount = (git describe --long --tags | % { $_ -replace "-", "." } )
     
         Pop-Location
     
@@ -910,8 +903,7 @@ function Get-KiCad-PackageVersion {
 
 function Get-KiCad-Version {
     $srcFile = Join-Path -Path (Get-Source-Path kicad) -ChildPath "CMakeModules\KiCadVersion.cmake"
-    if( -not (Test-Path $srcFile ) )
-    {
+    if ( -not (Test-Path $srcFile ) ) {
         # new path in master
         $srcFile = Join-Path -Path (Get-Source-Path kicad) -ChildPath "cmake\KiCadVersion.cmake"
     }
@@ -927,7 +919,7 @@ function Get-KiCad-PackageVersion-Msix {
     $base = Get-KiCad-Version
     
     Push-Location (Get-Source-Path kicad)
-    $revCount = (git describe --long --tags | %{$_ -replace "-","."} )
+    $revCount = (git describe --long --tags | % { $_ -replace "-", "." } )
     Pop-Location
 
     # SPECIAL REQUIREMENT
@@ -939,17 +931,17 @@ function Get-KiCad-PackageVersion-Msix {
 function Sign-File {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [string]$File
     )
 
     Write-Host "Signing file: $File" -ForegroundColor Blue
 
-    if( $SignAKV ) {
+    if ( $SignAKV ) {
         azuresigntool sign -kvt "$AKVTenantId" -fd sha256 `
-                            -td sha256 -kvu "$AKVUrl" -kvi "$AKVAppId" `
-                            -kvs "$AKVAppSecret" -kvc "$AKVCertName" `
-                            -tr http://timestamp.digicert.com -q "$File"
+            -td sha256 -kvu "$AKVUrl" -kvi "$AKVAppId" `
+            -kvs "$AKVAppSecret" -kvc "$AKVCertName" `
+            -tr http://timestamp.digicert.com -q "$File"
                         
         if ($LastExitCode -ne 0) {
             Write-Error "Error signing file $File, exit code $LastExitCode"
@@ -970,18 +962,18 @@ function Sign-File {
 function Start-Prepare-Package {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('Release', 'Debug')]
         [string]$buildType = "Release",
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$includeVcpkgDebugSymbols = $False,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$lite = $False,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$sign = $False,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$sentryArtifact = $false
     )
     # Required for signing
@@ -998,7 +990,7 @@ function Start-Prepare-Package {
 
     Write-Host "Package Version: $packageVersion"
     Write-Host "KiCad Version: $kicadVersion"
-    if($lite) {
+    if ($lite) {
         Write-Host "Lite package"
     }
     else {
@@ -1008,10 +1000,11 @@ function Start-Prepare-Package {
     $triplet = Get-Vcpkg-Triplet -Arch $arch
     $buildName = Get-Build-Name -Arch $arch -BuildType $buildType
 
-    if($buildConfig.vcpkg.manifest_mode) {
+    if ($buildConfig.vcpkg.manifest_mode) {
         $kiPath = Get-Source-Path kicad
         $vcpkgInstalledRoot = Join-Path -Path $kiPath -ChildPath "build/$buildName/vcpkg_installed/$triplet/"
-    } else {
+    }
+    else {
         $vcpkgInstalledRoot = Join-Path -Path $settings["VcpkgPath"] -ChildPath "installed\$triplet\"
     }
     $vcpkgInstalledRootPrimary = $vcpkgInstalledRoot
@@ -1021,20 +1014,19 @@ function Start-Prepare-Package {
     $destEtc = Join-Path -Path $destRoot -ChildPath "etc\"
 
     # Now delete the existing output content
-    if( Test-Path $destRoot )
-    {
+    if ( Test-Path $destRoot ) {
         Remove-Item $destRoot -Recurse -Force
     }
 
     Install-Kicad -arch $arch -buildType $buildType
 
     # Perfect time to create the sentry artifact
-    if( $sentryArtifact ) {
+    if ( $sentryArtifact ) {
         $outFileName = "$($buildConfig.output_prefix)$packageVersion-$nsisArch-sentry.zip"
 
         $sentryOutPath = Join-Path -Path $BuilderPaths.OutRoot -ChildPath $outFileName
 
-        7za a -tzip -mm=lzma -bsp0 $sentryOutPath -x!*\ ($destBin+"\*") -r0
+        7za a -tzip -mm=lzma -bsp0 $sentryOutPath -x!*\ ($destBin + "\*") -r0
 
                 
         # Now create source bundles for sentry
@@ -1050,29 +1042,28 @@ function Start-Prepare-Package {
             sentry-cli difutil bundle-sources $file.FullName -o $bundleOutFolder
         }
         
-        7za a -tzip -mm=lzma -bsp0 $sentrySrcOutPath -x!*\ ($bundleOutFolder+"\*") -r0
+        7za a -tzip -mm=lzma -bsp0 $sentrySrcOutPath -x!*\ ($bundleOutFolder + "\*") -r0
     }
 
-    if( -not $lite )
-    {
+    if ( -not $lite ) {
         Install-Library -arch $arch -buildType $buildType -libraryFolderName kicad-symbols
         Install-Library -arch $arch -buildType $buildType -libraryFolderName kicad-footprints
         Install-Library -arch $arch -buildType $buildType -libraryFolderName kicad-packages3D
         Install-Library -arch $arch -buildType $buildType -libraryFolderName kicad-templates
     }
 
-    if( $buildType -eq 'Debug' )
-    {
+    if ( $buildType -eq 'Debug' ) {
         $vcpkgInstalledRoot = Join-Path -Path $vcpkgInstalledRoot -ChildPath "debug"
     }
 
     
-    if($buildConfig.vcpkg.manifest_mode) {
+    if ($buildConfig.vcpkg.manifest_mode) {
         $vcpkgInstalledBin = Join-Path -Path $vcpkgInstalledRoot -ChildPath "bin\"
 
         Write-Host "Copying from $vcpkgInstalledBin to $destBin" -ForegroundColor Yellow
         Copy-Item "$vcpkgInstalledBin*" -Destination $destBin -Filter *.dll -Recurse
-    } else {
+    }
+    else {
         # All libraries to copy _should use a wildcard at the end
         # This is to copy both the .dll and .pdb
         # Or only .dll based on switch
@@ -1082,12 +1073,10 @@ function Start-Prepare-Package {
         $vcpkgInstalledBin = Join-Path -Path $vcpkgInstalledRoot -ChildPath "bin\"
     
         Write-Host "Copying from $vcpkgInstalledBin to $destBin" -ForegroundColor Yellow
-        foreach( $copyFilter in $vcpkgBinCopy )
-        {
+        foreach ( $copyFilter in $vcpkgBinCopy ) {
             $source = "$vcpkgInstalledBin\$copyFilter"
     
-            if(!$includeVcpkgDebugSymbols)
-            {
+            if (!$includeVcpkgDebugSymbols) {
                 $source += ".dll";
             }
     
@@ -1108,11 +1097,10 @@ function Start-Prepare-Package {
     Copy-Item $ngspiceLib -Destination $ngspiceDestLib -Recurse -Container -Force
 
     ### fixup for 64-bit....ngspice appends "64" to the end of the code model names wrongly
-    if( $arch -eq [Arch]::x64 )
-    {
+    if ( $arch -eq [Arch]::x64 ) {
         Get-ChildItem $ngspiceDestLib -Filter *64.cm |
         Foreach-Object {
-            $newName = $_.Name -replace '64.cm','.cm'
+            $newName = $_.Name -replace '64.cm', '.cm'
 
             Rename-Item -Path $_.FullName -NewName $newName
         }
@@ -1136,7 +1124,7 @@ function Start-Prepare-Package {
 
     ### lets setup pip
     $hostArch = Get-HostArch
-    if( $arch -eq $hostArch ) {
+    if ( $arch -eq $hostArch ) {
         # we can't run this if the python.exe compiled isn't the same arch
         Write-Host "Ensuring pip is bundled and installed"
         $pythonBin = Join-Path -Path $destBin -ChildPath "python.exe"
@@ -1147,7 +1135,7 @@ function Start-Prepare-Package {
         }
     }
 
-    if( $arch -ne [Arch]::arm64) {
+    if ( $arch -ne [Arch]::arm64) {
         # no wxpython on arm64 due to reqs not existing for the arch
         $wxRequirements = Join-Path -Path $PSScriptRoot -ChildPath "\support\wxrequirements.txt"
 
@@ -1176,7 +1164,7 @@ function Start-Prepare-Package {
     Write-Host "Copying $xsltprocSource to $destBin"
     Copy-Item $xsltprocSource -Destination $destBin -Recurse  -Force
 
-    if( $sign ) {
+    if ( $sign ) {
         Get-ChildItem $destBin -Recurse -Filter *.exe |
         Foreach-Object {
             Sign-File -File $_.FullName
@@ -1221,18 +1209,18 @@ function script:Patch-Python-Manifest([string]$PythonRoot) {
 function Start-Package-Nsis {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('Release', 'Debug')]
         [string]$buildType = "Release",
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$includeVcpkgDebugSymbols = $False,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$lite = $False,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$postCleanup = $False,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$sign = $False
     )
 
@@ -1243,7 +1231,7 @@ function Start-Package-Nsis {
 
     Write-Host "Package Version: $packageVersion"
     Write-Host "KiCad Version: $kicadVersion"
-    if($lite) {
+    if ($lite) {
         Write-Host "Lite package"
     }
     else {
@@ -1268,12 +1256,11 @@ function Start-Package-Nsis {
     Copy-Item $readmeSrc -Destination "$destRoot\COPYRIGHT.txt" -Force
 
     $outTags = ""
-    if( $buildType -eq 'Debug' )
-    {
+    if ( $buildType -eq 'Debug' ) {
         $outTags = '-dbg'
     }
 
-    if( $lite ) {
+    if ( $lite ) {
         $outTags = "$outTags-lite"
     }
 
@@ -1281,16 +1268,15 @@ function Start-Package-Nsis {
     
     $destKicadShare = Join-Path -Path $destRoot -ChildPath "share\kicad"
 
-    if( $lite )
-    {
+    if ( $lite ) {
         # needed for lite mode to enable footprints and symbols, why? who knows for now
         New-Item -ItemType "directory" -Path (Join-Path -Path $destKicadShare -ChildPath "\footprints")
         New-Item -ItemType "directory" -Path (Join-Path -Path $destKicadShare -ChildPath "\symbols")
         
         $libRefName = "master";
         # out of laziness we will just use the symbol ref as the ref for all libraries download in the lite
-        if( $buildConfig.sources.symbols.ref ) {
-            if( $buildConfig.sources.symbols.ref.StartsWith("branch/") ) {
+        if ( $buildConfig.sources.symbols.ref ) {
+            if ( $buildConfig.sources.symbols.ref.StartsWith("branch/") ) {
                 $libRefName = $buildConfig.sources.symbols.ref.Replace("branch/", "")
             }
             elseif ( $buildConfig.sources.symbols.ref.StartsWith("tag/") ) {
@@ -1306,8 +1292,7 @@ function Start-Package-Nsis {
             /DMSVC `
             "$nsisScript"
     }
-    else
-    {
+    else {
         makensis /DPACKAGE_VERSION=$packageVersion `
             /DKICAD_VERSION=$kicadVersion `
             /DOUTFILE="..\..\$outFileName" `
@@ -1316,12 +1301,12 @@ function Start-Package-Nsis {
             "$nsisScript"
     }
 
-    if($postCleanup) {
+    if ($postCleanup) {
         $nsisFolder = Join-Path -Path $destRoot -ChildPath "nsis"
         Remove-Item $nsisFolder -Recurse -Force
     }
 
-    if($sign) {
+    if ($sign) {
         Sign-File -File (Join-Path -Path $BuilderPaths.OutRoot -ChildPath $outFileName)
     }
 
@@ -1335,9 +1320,9 @@ function Start-Package-Nsis {
 function Start-Package-Pdb() {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('Release', 'Debug')]
         [string]$buildType = "Release"
     )
@@ -1364,9 +1349,10 @@ function Start-Package-Pdb() {
     }
 
     $vcpkgPdbSource = Join-Path -Path (Get-Source-Path kicad) -ChildPath "build/$buildName/vcpkg_installed/$triplet/"
-    if($buildType -eq 'Release') {
+    if ($buildType -eq 'Release') {
         $vcpkgPdbSource = Join-Path -Path $vcpkgPdbSource -ChildPath "bin";
-    } else {
+    }
+    else {
         $vcpkgPdbSource = Join-Path -Path $vcpkgPdbSource -ChildPath "debug/bin";
     }
 
@@ -1385,21 +1371,21 @@ function Start-Package-Pdb() {
 function Create-AppxManifest {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [string]$SourcePath,
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [string]$DestPath,
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [string]$KiCadVersion,
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [string]$Arch,
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [string]$PackageVersion,
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [string]$IdentityPublisher,
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [string]$IdentityName,
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [string]$PublisherDisplayName
     )
 
@@ -1419,18 +1405,18 @@ function Create-AppxManifest {
 function Start-Package-Msix {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('Release', 'Debug')]
         [string]$buildType = "Release",
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$includeVcpkgDebugSymbols = $False,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$lite = $False,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$postCleanup = $False,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [string]$version = ""
     )
 
@@ -1443,7 +1429,7 @@ function Start-Package-Msix {
 
     Write-Host "Package Version: $packageVersion"
     Write-Host "KiCad Version: $kicadVersion"
-    if($lite) {
+    if ($lite) {
         Write-Host "Lite package"
     }
     else {
@@ -1457,8 +1443,7 @@ function Start-Package-Msix {
     $destRoot = Join-Path -Path $BuilderPaths.OutRoot -ChildPath "\msix-$buildName"
     $destRootVfs = Join-Path -Path $destRoot -ChildPath "\VFS\ProgramFilesX64\KiCad\5.99\"
 
-    if( -not (Test-Path $destRootVfs) )
-    {
+    if ( -not (Test-Path $destRootVfs) ) {
         New-Item -Path $destRootVfs -ItemType "directory"
     }
 
@@ -1471,23 +1456,22 @@ function Start-Package-Msix {
     Copy-Item "${msixSource}\*" -Exclude "*.template" -Destination $destRoot -Recurse -Force
 
     $msixManifestSource = Join-Path -Path $PSScriptRoot -ChildPath "msix\$version\AppxManifest.xml.template"
-    $msixManifestDest= Join-Path -Path $destRoot -ChildPath "AppxManifest.xml" 
+    $msixManifestDest = Join-Path -Path $destRoot -ChildPath "AppxManifest.xml" 
     Create-AppxManifest -SourcePath $msixManifestSource `
-                        -DestPath $msixManifestDest `
-                        -KiCadVersion $kicadVersion `
-                        -PackageVersion $packageVersion `
-                        -Arch "x64" `
-                        -IdentityPublisher "CN=069DD09B-C97F-4C04-9248-7A7FA0D53E48" `
-                        -IdentityName "KiCad.KiCad" `
-                        -PublisherDisplayName "KiCad Services Corporation"
+        -DestPath $msixManifestDest `
+        -KiCadVersion $kicadVersion `
+        -PackageVersion $packageVersion `
+        -Arch "x64" `
+        -IdentityPublisher "CN=069DD09B-C97F-4C04-9248-7A7FA0D53E48" `
+        -IdentityName "KiCad.KiCad" `
+        -PublisherDisplayName "KiCad Services Corporation"
 
     $priFilePath = Join-Path -Path $destRoot -ChildPath "priconfig.xml"
     #makepri createconfig /cf priconfig.xml /dq en-US
     Push-Location $destRoot
     Write-Host "Running makepri"
     makepri new /pr "$destRoot" /cf "$priFilePath" /o
-    if( $LastExitCode -ne 0 )
-    {
+    if ( $LastExitCode -ne 0 ) {
         Write-Error "Error generating resource pack"
         Exit [ExitCodes]::MakePriFailure
     }
@@ -1497,15 +1481,13 @@ function Start-Package-Msix {
     $outFileName = "$($buildConfig.output_prefix)$packageVersion-$arch.msix"
     $outFilePath = Join-Path -Path $BuilderPaths.OutRoot -ChildPath $outFileName
     makeappx pack /d "$destRoot" /p "$outFilePath" /o 
-    if( $LastExitCode -ne 0 )
-    {
+    if ( $LastExitCode -ne 0 ) {
         Write-Error "Error generating appx package"
         Exit [ExitCodes]::MakeAppxFailure
     }
 
     Write-Host "Msix built!" -ForegroundColor Green
-    if( $postCleanup )
-    {
+    if ( $postCleanup ) {
         Write-Host "Cleanup: Removing intermediate build folder $destRoot"
         Remove-Item $destRoot -Recurse -ErrorAction SilentlyContinue
     }
@@ -1515,15 +1497,14 @@ function Start-Package-Msix {
 function Generate-Msix-Assets {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [string]$version
     )
 
 
     $iconSources = Join-Path -Path $PSScriptRoot -ChildPath "msix\$version\bundleassets\sources\"
 
-    if( -not (Test-Path $iconSources) )
-    {
+    if ( -not (Test-Path $iconSources) ) {
         Write-Error "Version icon msix icon sources do not exist"
         Exit [ExitCodes]::InvalidMsixVersion
     }
@@ -1539,7 +1520,7 @@ function Generate-Msix-Assets {
     Convert-Svg -Svg $kicadStoreIconSource -Width 300 -Height 300 -Out "$iconDest/icon_kicad_store.png"
 
     $icons = Get-ChildItem $iconSources -Filter icon*.svg
-    foreach ($f in $icons){
+    foreach ($f in $icons) {
         $basePath = "$iconDest/$($f.BaseName)"
         New-TileIcons  -Svg $f.FullName -Out $basePath
     }
@@ -1550,15 +1531,15 @@ function Generate-Msix-Assets {
 function Set-Config {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [string]$VcpkgPath,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [bool]$UseMsvcCmake,
-        [Parameter(Mandatory=$False)]
+        [Parameter(Mandatory = $False)]
         [string]$SentryDsn
     )
 
-    if( $VcpkgPath -ne "" ) {
+    if ( $VcpkgPath -ne "" ) {
         $settings.VcpkgPath = $VcpkgPath
         if ( -Not (Test-Path $VcpkgPath) ) {
             Write-Error "Invalid vcpkg path"
@@ -1568,7 +1549,7 @@ function Set-Config {
 
     $settings.UseMsvcCmake = $UseMsvcCmake
 
-    if( $VcpkgPath -ne "" ) {
+    if ( $VcpkgPath -ne "" ) {
         $settings.SentryDsn = $SentryDsn
     }
 
@@ -1579,7 +1560,7 @@ function Set-Config {
 function Start-Env {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory = $True)]
         [Arch]$arch
     )
 
@@ -1596,56 +1577,44 @@ function Start-Env {
 # Decode and execute the selected script stage
 ###
 
-if( $Config )
-{
+if ( $Config ) {
     Set-Config -VcpkgPath $VcpkgPath -UseMsvcCmake $UseMsvcCmake -SentryDsn $SentryDsn
 }
 
-if( $Init )
-{
+if ( $Init ) {
     Start-Init
 }
 
-if( $Env )
-{
+if ( $Env ) {
     Start-Env -arch $Arch
 }
 
-if( $Vcpkg )
-{
+if ( $Vcpkg ) {
     Build-Vcpkg -arch $Arch -latest $True
 }
 
-if( $Build )
-{
+if ( $Build ) {
     Start-Build -arch $Arch -buildType $buildConfig.build_mode -latest $Latest
 }
 
-if( $MsixAssets )
-{
+if ( $MsixAssets ) {
     Generate-Msix-Assets -version $Version
 }
 
-if( $PreparePackage -or ($Package -and $Prepare) )
-{
+if ( $PreparePackage -or ($Package -and $Prepare) ) {
     Start-Prepare-Package -arch $Arch -buildType $buildConfig.build_mode -includeVcpkgDebugSymbols $false -lite $Lite -sign $Sign -sentryArtifact $SentryArtifact
 }
 
-if( $PackageSentry )
-{
+if ( $PackageSentry ) {
     Start-Bundle-Sentry -arch $Arch -buildType $buildConfig.build_mode
 }
 
-if( $Package )
-{
-    if( $PackType -eq 'nsis' )
-    {
+if ( $Package ) {
+    if ( $PackType -eq 'nsis' ) {
         Start-Package-Nsis -arch $Arch -buildType $buildConfig.build_mode -includeVcpkgDebugSymbols $false -lite $Lite -postCleanup $PostCleanup -sign $Sign
     }
-    elseif( $PackType -eq 'msix' )
-    {
-        if( $Lite )
-        {
+    elseif ( $PackType -eq 'msix' ) {
+        if ( $Lite ) {
             Write-Error "-Lite switched not supported for Msix build types"
             Exit [ExitCodes]::UnsupportedSwitch
         }
@@ -1653,8 +1622,7 @@ if( $Package )
         Start-Package-Msix -arch $Arch -buildType $BuildType -includeVcpkgDebugSymbols $IncludeVcpkgDebugSymbols -version $Version -postCleanup $PostCleanup
     }
     
-    if( $DebugSymbols )
-    {
+    if ( $DebugSymbols ) {
         Start-Package-Pdb -arch $Arch -buildType $buildConfig.build_mode
     }
 }
