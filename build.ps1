@@ -1160,9 +1160,9 @@ function Start-Prepare-Package {
     Patch-Python-Manifest -PythonRoot $destBin
 
     ## now libxslt
-    $xsltprocSource = "$vcpkgInstalledRootPrimary\tools\libxslt\xsltproc.exe"
-    Write-Host "Copying $xsltprocSource to $destBin"
-    Copy-Item $xsltprocSource -Destination $destBin -Recurse  -Force
+    # $xsltprocSource = "$vcpkgInstalledRootPrimary\tools\libxslt\xsltproc.exe"
+    # Write-Host "Copying $xsltprocSource to $destBin"
+    # Copy-Item $xsltprocSource -Destination $destBin -Recurse  -Force
 
     if ( $sign ) {
         Get-ChildItem $destBin -Recurse -Filter *.exe |
