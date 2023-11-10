@@ -9,7 +9,7 @@
     },
     "sources": {
         "kicad": {
-            "ref": "dev"
+            "ref": "branch/dev"
         },
         "symbols": {
             "ref": "tag/7.0.8"
