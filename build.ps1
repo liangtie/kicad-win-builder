@@ -99,7 +99,8 @@ param(
     [Parameter(Mandatory = $False, ParameterSetName = "vcpkg")]
     [Parameter(Mandatory = $False, ParameterSetName = "package")]
     [Parameter(Mandatory = $False, ParameterSetName = "preparepackage")]
-    [string]$BuildConfigName = 'kicad-7.0.8',
+    # NOTE Change to your build config
+    [string]$BuildConfigName = 'kicad-dev',
 
     [Parameter(Mandatory = $False, ParameterSetName = "build")]
     [Parameter(Mandatory = $False, ParameterSetName = "package")]
@@ -621,8 +622,9 @@ function Start-Build {
         [bool]$latest = $False
     )
 
-    Get-Source -url https://gitlab.com/kicad/code/kicad.git `
-        -dest (Get-Source-Path kicad) `
+    # NOTE Change to your own fork
+    Get-Source -url https://gitlab.com/Liangtie/kicad.git`
+    -dest (Get-Source-Path kicad) `
         -sourceType git `
         -latest $latest `
         -ref (Get-Source-Ref -sourceKey "kicad")
@@ -896,7 +898,7 @@ function Get-KiCad-PackageVersion {
         $revCount = (git describe --long --tags | % { $_ -replace "-", "." } )
     
         Pop-Location
-    
+
         return "$revCount"
     }
 }
