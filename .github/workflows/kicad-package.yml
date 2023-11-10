@@ -47,10 +47,7 @@ jobs:
             .support
 
       - name: Triggers a build
-        run: ./build.ps1 -Build -Latest -Arch x64 -BuildType Release  -erroraction silentlycontinue
-
-      - name: Show full build log
-        run: ./show_build_log.ps1
+        run: ./build.ps1 -Build -Latest -Arch x64 -BuildType Release
 
       - name: Cache vcpkg
         uses: actions/cache@v3
