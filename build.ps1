@@ -653,7 +653,7 @@ function Start-Build {
         -latest $latest `
         -ref (Get-Source-Ref -sourceKey "templates")
 
-    Build-KiCad -arch $arch -buildType $buildType
+    Build-KiCad -arch $arch -buildType $buildType -erroraction silentlycontinue
     Build-Library-Source -arch $arch -buildType $buildType -libraryFolderName kicad-symbols
     Build-Library-Source -arch $arch -buildType $buildType -libraryFolderName kicad-footprints
     Build-Library-Source -arch $arch -buildType $buildType -libraryFolderName kicad-packages3D
