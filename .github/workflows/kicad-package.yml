@@ -68,9 +68,6 @@ jobs:
       - name: Triggers a package operation Nsis
         run: ./build.ps1 -Package  -PackType Nsis   -Arch x64   -BuildType Release
 
-      - name: Show the dir content
-        run: ls -R
-
       - name: Upload installer as asset to release
         uses: svenstaro/upload-release-action@v2
         with:
