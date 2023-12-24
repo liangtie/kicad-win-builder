@@ -9,7 +9,7 @@
     },
     "sources": {
         "kicad": {
-            "ref": "branch/test/synchronize_sheet_entries_and_ports"
+            "ref": "branch/test/synchronize_sheet_entries_and_ports "
         },
         "symbols": {
             "ref": "tag/7.0.8"
