@@ -9,19 +9,19 @@
     },
     "sources": {
         "kicad": {
-            "ref": "branch/test/synchronize_sheet_entries_and_ports"
+            "ref": "branch/3dmodel_to_footprint"
         },
         "symbols": {
-            "ref": "tag/7.0.8"
+            "ref": "tag/7.0.5"
         },
         "footprints": {
-            "ref": "tag/7.0.8"
+            "ref": "tag/7.0.5"
         },
         "3dmodels": {
-            "ref": "tag/7.0.8"
+            "ref": "tag/7.0.5"
         },
         "templates": {
-            "ref": "tag/7.0.8"
+            "ref": "tag/7.0.5"
         }
     },
     "vcpkg": {
