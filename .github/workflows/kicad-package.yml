@@ -17,7 +17,7 @@ jobs:
       - name: Get latest tag
         uses: oprypin/find-latest-tag@v1
         with:
-          repository: Liangtie/kicad-win-builder
+          repository: SYSUeric66/kicad-win-builder
           releases-only: true
         id: latest-release
 
