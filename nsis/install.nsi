@@ -37,6 +37,7 @@
 !include "NsisMultiUser.nsh"
 !include "StdUtils.nsh"
 !include "RecFind.nsh"
+!include "Sections.nsh"
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
@@ -51,7 +52,7 @@
 ; subfolder under LocalAppData, this is the folder microsoft enshrines for app installs
 !define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 0
 !define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
-!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 1 ; required for silent-mode allusers-uninstall to work, when using the workaround for Windows elevation bug
+!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0 ; required for silent-mode allusers-uninstall to work, when using the workaround for Windows elevation bug
 !define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
 !define MULTIUSER_INSTALLMODE_64_BIT 1  ; it's ridiculous the plugin controls the program files view
 !define KICAD_MULTIUSER_INSTALLMODE_64_BIT_32BITVIEW 0 ; unsure the 32-bit hack is off
@@ -144,10 +145,14 @@ BrandingText "KiCad installer for Windows"
 ;!insertmacro MUI_PAGE_LICENSE $(MUILicense)
 !insertmacro MUI_PAGE_COMPONENTS
 
+!define MUI_PAGE_CUSTOMFUNCTION_SHOW onDirectoryPageShow
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE onDirectoryPageLeave
 !insertmacro MUI_PAGE_DIRECTORY
 
 !insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_TEXT "Launch ${PRODUCT_NAME} ${PACKAGE_VERSION}"
+!define MUI_FINISHPAGE_RUN_FUNCTION onFinishRun
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW ModifyFinishPage
 !insertmacro MUI_PAGE_FINISH
 
@@ -199,51 +204,6 @@ VIAddVersionKey "FileVersion" "${PACKAGE_VERSION}"
 
 !define SetEnvironmentVariable "Kernel32::SetEnvironmentVariable(t, t)i"
 
-Function .onInit
-	${ifnot} ${UAC_IsInnerInstance}
-    Call PreventMultiInstances
-	${endif}
-
-  !insertmacro MULTIUSER_INIT
-
-  !if ${ARCH} == 'arm64'
-    ${IfNot} ${IsNativeARM64}
-      MessageBox MB_OK|MB_TOPMOST $(ERROR_WRONG_ARCH)
-      Quit
-    ${endif}
-  !endif
-
-  !if ${ARCH} == 'x86_64'
-    SetRegView 64
-  !else if ${ARCH} == 'arm64'
-    SetRegView 64
-  !else
-    SetRegView 32
-  !endif
-
-  !ifdef MSVC
-  ; MSVC builds use python 3.8+ which dropped windows 7 support and will crash
-  ${IfNot} ${AtLeastWin8.1}
-      MessageBox MB_OK|MB_TOPMOST $(ERROR_WIN_MIN)
-      Quit
-  ${EndIf}
-  !endif
-
-  !ifdef LIBRARIES_TAG
-  StrCpy $DELETE_DOWNLOADED_FILES "unknown"
-  !endif
-
-  ReserveFile "install.ico"
-  ReserveFile "uninstall.ico"
-  ReserveFile "${NSISDIR}\Plugins\x86-unicode\LangDLL.dll"
-  ReserveFile "${NSISDIR}\Plugins\x86-unicode\System.dll"
-  ;!insertmacro MUI_LANGDLL_DISPLAY
-  Goto done
-
-  done:
-    Call EnableLiteMode
-
-FunctionEnd
 
 ; This handles skipping the welcome/license pages when UAC escalates to the inner installer
 Function PageWelcomeLicensePre
@@ -268,6 +228,11 @@ Function ModifyFinishPage
   IntOp $7 6 * $7
   ; then we finally update the control size.. we don't want to move it, or change its z-order however
   System::Call "User32::SetWindowPos(i $mui.FinishPage.ShowReadme, i 0, i 0, i 0, i $6, i $7, i ${SWP_NOMOVE} | ${SWP_NOZORDER})"
+FunctionEnd
+
+Function onFinishRun
+  ; We need this to run as the current user even if the install was admin escalated
+  !insertmacro UAC_AsUser_ExecShell '' '$INSTDIR\bin\kicad.exe' '' '' SW_SHOWNORMAL
 FunctionEnd
 
 !macro KiCadRunningProccessesCheck
@@ -325,6 +290,19 @@ FunctionEnd
 	DetailPrint "${Msg}"
 	SetDetailsPrint none
 !macroend
+
+Function onDirectoryPageShow
+	${if} $CmdLineDir != ""
+		${orif} $HasCurrentModeInstallation = 1
+		FindWindow $R1 "#32770" "" $HWNDPARENT
+
+		GetDlgItem $0 $R1 1019 ; Directory edit
+		SendMessage $0 ${EM_SETREADONLY} 1 0 ; read-only is better than disabled, as user can copy contents
+
+		GetDlgItem $0 $R1 1001 ; Browse button
+		EnableWindow $0 0
+	${endif}
+FunctionEnd
 
 Function onDirectoryPageLeave
   !insertmacro KiCadRunningProccessesCheck
@@ -396,6 +374,9 @@ Section $(TITLE_SEC_MAIN) SEC01
   
   SetOutPath "$INSTDIR\etc"
   File /r "..\etc\*"
+
+  SetOutPath "$INSTDIR\share\locale"
+  File /nonfatal /r "..\share\locale\*"
 
   SetOutPath "$INSTDIR\share\kicad\internat"
   File /nonfatal /r "..\share\kicad\internat\*"
@@ -570,17 +551,20 @@ SectionGroupEnd
 
 Section $(TITLE_SEC_FILE_ASSOC) SEC07
   !insertmacro ExclusiveDetailPrint $(SETTING_FILE_ASSOCS)
-  ${CreateFileAssociation} "kicad_pcb" "pcbnew.exe" "$(FILE_DESC_KICAD_PCB) ${KICAD_VERSION}" "icon_pcbnew"
-  ${CreateFileAssociation} "sch" "eeschema.exe" "$(FILE_DESC_SCH) ${KICAD_VERSION}" "icon_eeschema"
-  ${CreateFileAssociation} "kicad_sch" "eeschema.exe" "$(FILE_DESC_SCH) ${KICAD_VERSION}" "icon_eeschema"
-  ${CreateFileAssociation} "pro" "kicad.exe" "$(FILE_DESC_PRO) ${KICAD_VERSION}" "icon_kicad"
-  ${CreateFileAssociation} "kicad_pro" "kicad.exe" "$(FILE_DESC_PRO) ${KICAD_VERSION}" "icon_kicad"
-  ${CreateFileAssociation} "kicad_wks" "pl_editor.exe" "$(FILE_DESC_KICAD_WKS) ${KICAD_VERSION}" "icon_pagelayout_editor"
-
-  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "FileAssocInstalled" "1"
+  ; The strange negative numbers are the resource ids of the icons embedded into the exes, see resource.h in kicad's source
+  ; They are negative because of a Windows requirement where negative means "lookup the absolute value" in the exe's manifest
+  ${CreateFileAssociation} "kicad_pcb" "pcbnew.exe" "$(FILE_DESC_KICAD_PCB) ${KICAD_VERSION}" "-203"
+  ${CreateFileAssociation} "sch" "eeschema.exe" "$(FILE_DESC_SCH) ${KICAD_VERSION}" "-201"
+  ${CreateFileAssociation} "kicad_sch" "eeschema.exe" "$(FILE_DESC_SCH) ${KICAD_VERSION}" "-201"
+  ${CreateFileAssociation} "pro" "kicad.exe" "$(FILE_DESC_PRO) ${KICAD_VERSION}" "-200"
+  ${CreateFileAssociation} "kicad_pro" "kicad.exe" "$(FILE_DESC_PRO) ${KICAD_VERSION}" "-200"
+  ${CreateFileAssociation} "kicad_wks" "pl_editor.exe" "$(FILE_DESC_KICAD_WKS) ${KICAD_VERSION}" "-205"
+  ;not currently supported for opening
+  ;${CreateFileAssociation} "kicad_sym" "eeschema.exe" "$(FILE_DESC_SYM) ${KICAD_VERSION}" "-202"
+  ;${CreateFileAssociation} "kicad_mod" "pcbnew.exe" "$(FILE_DESC_FP) ${KICAD_VERSION}" "-204"
 SectionEnd
 
-Section -CreateShortcuts
+Section $(TITLE_SEC_START_MENU) SEC08
   !insertmacro ExclusiveDetailPrint $(CREATING_SHORTCUTS)
   SetOutPath $INSTDIR
 
@@ -588,14 +572,18 @@ Section -CreateShortcuts
   CreateDirectory "${SMPATH}"
   CreateShortCut "${SMPATH}\Uninstall.lnk" "$INSTDIR\uninstaller.exe"
   CreateShortCut "${SMPATH}\KiCad ${KICAD_VERSION}.lnk" "$INSTDIR\bin\kicad.exe"
-  CreateShortCut "${SMPATH}\Schematic Editor ${KICAD_VERSION}.lnk" "$INSTDIR\bin\eeschema.exe"
-  CreateShortCut "${SMPATH}\PCB Editor ${KICAD_VERSION}.lnk" "$INSTDIR\bin\pcbnew.exe"
-  CreateShortCut "${SMPATH}\Gerber Viewer ${KICAD_VERSION}.lnk" "$INSTDIR\bin\gerbview.exe"
-  CreateShortCut "${SMPATH}\Image Converter ${KICAD_VERSION}.lnk" "$INSTDIR\bin\bitmap2component.exe"
-  CreateShortCut "${SMPATH}\Calculator Tools ${KICAD_VERSION}.lnk" "$INSTDIR\bin\pcb_calculator.exe"
-  CreateShortCut "${SMPATH}\Drawing Sheet Editor ${KICAD_VERSION}.lnk" "$INSTDIR\bin\pl_editor.exe"
-  CreateShortCut "${SMPATH}\KiCad ${KICAD_VERSION} Command Prompt.lnk" "%comspec%" '/k "$INSTDIR\bin\kicad-cmd.bat"'
+  CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_EESCHEMA).lnk" "$INSTDIR\bin\eeschema.exe"
+  CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_PCBNEW).lnk" "$INSTDIR\bin\pcbnew.exe"
+  CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_GERBVIEW).lnk" "$INSTDIR\bin\gerbview.exe"
+  CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_BITMAP2COMPONENT).lnk" "$INSTDIR\bin\bitmap2component.exe"
+  CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_PCBCALCULATOR).lnk" "$INSTDIR\bin\pcb_calculator.exe"
+  CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_PLEDITOR).lnk" "$INSTDIR\bin\pl_editor.exe"
+  CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_CMD).lnk" "%comspec%" '/k "$INSTDIR\bin\kicad-cmd.bat"'
+  
+SectionEnd
 
+Section -CreateDesktopShortcut
+  !insertmacro ExclusiveDetailPrint $(CREATING_SHORTCUTS)
   CreateShortCut "$DESKTOP\KiCad ${KICAD_VERSION}.lnk" "$INSTDIR\bin\kicad.exe"
 SectionEnd
 
@@ -604,6 +592,45 @@ Section -CreateAddRemoveEntry
   WriteUninstaller "${UNINSTALL_FILENAME}"
 
   !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
+SectionEnd
+
+Section -PostInstall
+  ${If} ${SectionIsSelected} ${SEC03_SCHLIB}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionSymbols" "1"
+  ${Else}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionSymbols" "0"
+  ${EndIf}
+  
+  ${If} ${SectionIsSelected} ${SEC03_FOOTPRINTS}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionFootprints" "1"
+  ${Else}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionFootprints" "0"
+  ${EndIf}
+  
+  ${If} ${SectionIsSelected} ${SEC03_PACKAGES3D}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "Section3DModels" "1"
+  ${Else}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "Section3DModels" "0"
+  ${EndIf}
+
+  ${If} ${SectionIsSelected} ${SEC05}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionDemos" "1"
+  ${Else}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionDemos" "0"
+  ${EndIf}
+
+  ${If} ${SectionIsSelected} ${SEC08}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionStartMenuShortcuts" "1"
+  ${Else}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionStartMenuShortcuts" "0"
+  ${EndIf}
+  
+  ${If} ${SectionIsSelected} ${SEC07}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionFileAssoc" "1"
+  ${Else}
+  WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionFileAssoc" "0"
+  ${EndIf}
+
 SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -629,7 +656,103 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC06_PL} $(DESC_SEC_DOCS_PL)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC06_ZH} $(DESC_SEC_DOCS_ZH)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC07} $(DESC_SEC_FILE_ASSOC)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC08} $(DESC_SEC_START_MENU)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+
+Function .onInit
+	${ifnot} ${UAC_IsInnerInstance}
+    Call PreventMultiInstances
+	${endif}
+
+  !insertmacro MULTIUSER_INIT
+
+  !if ${ARCH} == 'arm64'
+    ${IfNot} ${IsNativeARM64}
+      MessageBox MB_OK|MB_TOPMOST $(ERROR_WRONG_ARCH)
+      Quit
+    ${endif}
+  !endif
+
+  !if ${ARCH} == 'x86_64'
+    SetRegView 64
+  !else if ${ARCH} == 'arm64'
+    SetRegView 64
+  !else
+    SetRegView 32
+  !endif
+
+  !ifdef MSVC
+  ; MSVC builds use python 3.8+ which dropped windows 7 support and will crash
+  ${IfNot} ${AtLeastWin8.1}
+      MessageBox MB_OK|MB_TOPMOST $(ERROR_WIN_MIN)
+      Quit
+  ${EndIf}
+  !endif
+
+  !ifdef LIBRARIES_TAG
+  StrCpy $DELETE_DOWNLOADED_FILES "unknown"
+  !endif
+
+  ; Change section selections based on already installed
+  ; Check if we already have an install (MSYS2)
+  ; Refuse to run until its uninstalled
+  ReadRegDWORD $1 ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionStartMenuShortcuts"
+  ${IfNot} ${Errors}
+    ${If} $1 = 0
+      !insertmacro UnselectSection ${SEC08}
+    ${EndIf}
+  ${EndIf}
+  
+  ReadRegDWORD $1 ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionFileAssoc"
+  ${IfNot} ${Errors}
+    ${If} $1 = 0
+      !insertmacro UnselectSection ${SEC07}
+    ${EndIf}
+  ${EndIf}
+  
+  !ifndef LIBRARIES_TAG
+  ReadRegDWORD $1 ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionSymbols"
+  ${IfNot} ${Errors}
+    ${If} $1 = 0
+      !insertmacro UnselectSection ${SEC03_SCHLIB}
+    ${EndIf}
+  ${EndIf}
+  
+  ReadRegDWORD $1 ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionFootprints"
+  ${IfNot} ${Errors}
+    ${If} $1 = 0
+      !insertmacro UnselectSection ${SEC03_FOOTPRINTS}
+    ${EndIf}
+  ${EndIf}
+  
+  ReadRegDWORD $1 ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "Section3DModels"
+  ${IfNot} ${Errors}
+    ${If} $1 = 0
+      !insertmacro UnselectSection ${SEC03_PACKAGES3D}
+    ${EndIf}
+  ${EndIf}
+  !endif
+
+  ReadRegDWORD $1 ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "SectionDemos"
+  ${IfNot} ${Errors}
+    ${If} $1 = 0
+      !insertmacro UnselectSection ${SEC05}
+    ${EndIf}
+  ${EndIf}
+
+  ReserveFile "install.ico"
+  ReserveFile "uninstall.ico"
+  ReserveFile "${NSISDIR}\Plugins\x86-unicode\LangDLL.dll"
+  ReserveFile "${NSISDIR}\Plugins\x86-unicode\System.dll"
+  ;!insertmacro MUI_LANGDLL_DISPLAY
+  Goto done
+
+  done:
+    Call EnableLiteMode
+
+FunctionEnd
+
 
 Var SemiSilentMode ; installer started uninstaller in semi-silent mode using /SS parameter
 Var RunningFromInstaller ; installer started uninstaller using /uninstall parameter
@@ -697,7 +820,7 @@ FunctionEnd
 
 Section Uninstall
   ;delete uninstaller first
-  Delete "$INSTDIR\uninstaller.exe"
+  Delete "$INSTDIR\${UNINSTALL_FILENAME}"
 
   ;remove start menu shortcuts and web page links
   !insertmacro ExclusiveDetailPrint $(REMOVING_SHORTCUTS)
@@ -717,10 +840,13 @@ Section Uninstall
   RMDir /r "$INSTDIR\help"
   RMDir /r "$INSTDIR\ssl\certs"
   RMDir /r "$INSTDIR\ssl"
+  RMDir /r "$INSTDIR\share\locale"
+  RMDir /r "$INSTDIR\etc"
   
   !insertmacro ExclusiveDetailPrint $(REMOVING_LIBRARIES)
   RMDir /r "$INSTDIR\share\symbols"
   RMDir /r "$INSTDIR\share\footprints"
+  RMDir /r "$INSTDIR\share\3dmodels"
   RMDir /r "$INSTDIR\share\kicad\template"
   RMDir /r "$INSTDIR\share\kicad\internat"
   RMDir /r "$INSTDIR\share\kicad\demos"

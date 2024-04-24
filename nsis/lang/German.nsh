@@ -10,10 +10,7 @@ KiCad ist freie Quelloffene Software lizenziert unter den Bestimmungen der GPL.$
 Klicken Sie auf Weiter um fortzufahren."
 
 ;Error messages
-LangString ERROR_ADMIN_REQ  ${LANG_GERMAN} "Administrative Rechte werden benötigt um KiCad installieren zu können!"
-LangString ERROR_WIN9X      ${LANG_GERMAN} "Fehler! Dieses Programm kann nicht in Windows 9x benutzt werden!"
 LangString ERROR_WIN_MIN    ${LANG_GERMAN} "A minimum of Windows 8.1 is required to install KiCad using this installer"
-LangString ERROR_UNINSTALL_FIRST    ${LANG_GERMAN} "You must run the uninstaller on your existing KiCad ${KICAD_VERSION} installation to proceed with installation"
 LangString ERROR_WRONG_ARCH         ${LANG_GERMAN} "This installer is for a different processor architecture (${ARCH}), please use the correct installer"
 
 ;Other languages
@@ -36,6 +33,7 @@ LangString TITLE_SEC_PACKAGES3D ${LANG_GERMAN} "Footprint 3d models"
 LangString TITLE_SEC_DEMOS ${LANG_GERMAN} "Demo Projekte"
 LangString TITLE_SEC_DOCS ${LANG_GERMAN} "Hilfedateien"
 LangString TITLE_SEC_FILE_ASSOC ${LANG_GERMAN} "File associations"
+LangString TITLE_SEC_START_MENU ${LANG_GERMAN} "Start menu shortcuts"
 
 ;Component option descriptions
 LangString DESC_SEC_MAIN ${LANG_GERMAN} "Dateien für das Hauptprogramm."
@@ -57,27 +55,39 @@ LangString DESC_SEC_DOCS_NL ${LANG_GERMAN} "$(LANGUAGE_NAME_NL) $(TITLE_SEC_DOCS
 LangString DESC_SEC_DOCS_PL ${LANG_GERMAN} "$(LANGUAGE_NAME_PL) $(TITLE_SEC_DOCS)"
 LangString DESC_SEC_DOCS_ZH ${LANG_GERMAN} "$(LANGUAGE_NAME_ZH) $(TITLE_SEC_DOCS)"
 LangString DESC_SEC_FILE_ASSOC ${LANG_GERMAN} "Creates file associations for KiCad related files"
+LangString DESC_SEC_START_MENU ${LANG_GERMAN} "Creates start menu shortcuts"
 
 ;File association descriptions (show in Windows Explorer)
 LangString FILE_DESC_KICAD_PCB ${LANG_GERMAN} "KiCad Board"
 LangString FILE_DESC_SCH ${LANG_GERMAN} "KiCad Schematic"
 LangString FILE_DESC_PRO ${LANG_GERMAN} "KiCad Project"
-LangString FILE_DESC_KICAD_WKS ${LANG_GERMAN} "KiCad Page Layout"
+LangString FILE_DESC_KICAD_WKS ${LANG_GERMAN} "KiCad Drawing Sheet"
+LangString FILE_DESC_SYM ${LANG_GERMAN} "KiCad Symbol"
+LangString FILE_DESC_FP ${LANG_GERMAN} "KiCad Footprint"
 
 ;Application Friendly Names (for windows explorer hook)
 LangString APP_FRIENDLY_KICAD ${LANG_GERMAN} "KiCad"
-LangString APP_FRIENDLY_PCBNEW ${LANG_GERMAN} "KiCad - Pcbnew"
-LangString APP_FRIENDLY_EESCHEMA ${LANG_GERMAN} "KiCad - Eeschema"
-LangString APP_FRIENDLY_PLEDITOR ${LANG_GERMAN} "KiCad - Page Layout Editor"
+LangString APP_FRIENDLY_PCBNEW ${LANG_GERMAN} "KiCad - PCB Editor"
+LangString APP_FRIENDLY_EESCHEMA ${LANG_GERMAN} "KiCad - Schematic Editor"
+LangString APP_FRIENDLY_PLEDITOR ${LANG_GERMAN} "KiCad - Drawing Sheet Editor"
 
 ;Application names
-LangString APP_NAME_KICAD ${LANG_GERMAN} "KiCad"
-LangString APP_NAME_PCBNEW ${LANG_GERMAN} "Pcbnew"
-LangString APP_NAME_EESCHEMA ${LANG_GERMAN} "Eeschema"
-LangString APP_NAME_PLEDITOR ${LANG_GERMAN} "Page Layout Editor"
-LangString APP_NAME_PCBCALCULATOR ${LANG_GERMAN} "PCB Calculator"
-LangString APP_NAME_BITMAP2COMPONENT ${LANG_GERMAN} "Bitmap to Component"
-LangString APP_NAME_GERBVIEW ${LANG_GERMAN} "Gerbview"
+LangString APP_NAME_KICAD ${LANG_GERMAN} "KiCad (kicad.exe)"
+LangString APP_NAME_PCBNEW ${LANG_GERMAN} "PCB Editor (pcbnew.exe)"
+LangString APP_NAME_EESCHEMA ${LANG_GERMAN} "Schematic Editor (eeschema.exe)"
+LangString APP_NAME_PLEDITOR ${LANG_GERMAN} "Drawing Sheet Editor (pl_editor.exe)"
+LangString APP_NAME_PCBCALCULATOR ${LANG_GERMAN} "PCB Calculator (pcb_calculator.exe)"
+LangString APP_NAME_BITMAP2COMPONENT ${LANG_GERMAN} "Image Converter (bitmap2component.exe)"
+LangString APP_NAME_GERBVIEW ${LANG_GERMAN} "Gerber Viewer (gerbview.exe)"
+
+;Shortcut names
+LangString SHORTCUT_NAME_EESCHEMA ${LANG_GERMAN} "Schematic Editor ${KICAD_VERSION} (standalone)"
+LangString SHORTCUT_NAME_PCBNEW ${LANG_GERMAN} "PCB Editor ${KICAD_VERSION} (standalone)"
+LangString SHORTCUT_NAME_GERBVIEW ${LANG_GERMAN} "Gerber Viewer ${KICAD_VERSION}"
+LangString SHORTCUT_NAME_BITMAP2COMPONENT ${LANG_GERMAN} "Image Converter ${KICAD_VERSION}"
+LangString SHORTCUT_NAME_PCBCALCULATOR ${LANG_GERMAN} "Calculator Tools ${KICAD_VERSION}"
+LangString SHORTCUT_NAME_PLEDITOR ${LANG_GERMAN} "Drawing Sheet Editor ${KICAD_VERSION}"
+LangString SHORTCUT_NAME_CMD ${LANG_GERMAN} "KiCad ${KICAD_VERSION} Command Prompt"
 
 ;General messages
 LangString PROGRAM_IS_OPEN_ERROR ${LANG_GERMAN} "$R1 is currently running! You must close the program before you are allowed continue."

@@ -51,7 +51,7 @@
 ; subfolder under LocalAppData, this is the folder microsoft enshrines for app installs
 !define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 0
 !define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
-!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 1 ; required for silent-mode allusers-uninstall to work, when using the workaround for Windows elevation bug
+!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0 ; required for silent-mode allusers-uninstall to work, when using the workaround for Windows elevation bug
 !define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
 !define MULTIUSER_INSTALLMODE_64_BIT 1  ; it's ridiculous the plugin controls the program files view
 !define KICAD_MULTIUSER_INSTALLMODE_64_BIT_32BITVIEW 1 ; We added this hack because we had 32-bit regview by default in 7.0 and are adding multi-user midcycle
@@ -382,6 +382,9 @@ Section $(TITLE_SEC_MAIN) SEC01
   SetOutPath "$INSTDIR\etc"
   File /r "..\etc\*"
 
+  SetOutPath "$INSTDIR\share\locale"
+  File /nonfatal /r "..\share\locale\*"
+
   SetOutPath "$INSTDIR\share\kicad\internat"
   File /nonfatal /r "..\share\kicad\internat\*"
 
@@ -555,12 +558,12 @@ SectionGroupEnd
 
 Section $(TITLE_SEC_FILE_ASSOC) SEC07
   !insertmacro ExclusiveDetailPrint $(SETTING_FILE_ASSOCS)
-  ${CreateFileAssociation} "kicad_pcb" "pcbnew.exe" "$(FILE_DESC_KICAD_PCB) ${KICAD_VERSION}" "icon_pcbnew"
-  ${CreateFileAssociation} "sch" "eeschema.exe" "$(FILE_DESC_SCH) ${KICAD_VERSION}" "icon_eeschema"
-  ${CreateFileAssociation} "kicad_sch" "eeschema.exe" "$(FILE_DESC_SCH) ${KICAD_VERSION}" "icon_eeschema"
-  ${CreateFileAssociation} "pro" "kicad.exe" "$(FILE_DESC_PRO) ${KICAD_VERSION}" "icon_kicad"
-  ${CreateFileAssociation} "kicad_pro" "kicad.exe" "$(FILE_DESC_PRO) ${KICAD_VERSION}" "icon_kicad"
-  ${CreateFileAssociation} "kicad_wks" "pl_editor.exe" "$(FILE_DESC_KICAD_WKS) ${KICAD_VERSION}" "icon_pagelayout_editor"
+  ${CreateFileAssociationNoIcon} "kicad_pcb" "pcbnew.exe" "$(FILE_DESC_KICAD_PCB) ${KICAD_VERSION}"
+  ${CreateFileAssociationNoIcon} "sch" "eeschema.exe" "$(FILE_DESC_SCH) ${KICAD_VERSION}"
+  ${CreateFileAssociationNoIcon} "kicad_sch" "eeschema.exe" "$(FILE_DESC_SCH) ${KICAD_VERSION}"
+  ${CreateFileAssociationNoIcon} "pro" "kicad.exe" "$(FILE_DESC_PRO) ${KICAD_VERSION}"
+  ${CreateFileAssociationNoIcon} "kicad_pro" "kicad.exe" "$(FILE_DESC_PRO) ${KICAD_VERSION}"
+  ${CreateFileAssociationNoIcon} "kicad_wks" "pl_editor.exe" "$(FILE_DESC_KICAD_WKS) ${KICAD_VERSION}"
 
   WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "FileAssocInstalled" "1"
 SectionEnd
@@ -682,7 +685,7 @@ FunctionEnd
 
 Section Uninstall
   ;delete uninstaller first
-  Delete "$INSTDIR\uninstaller.exe"
+  Delete "$INSTDIR\${UNINSTALL_FILENAME}"
 
   ;remove start menu shortcuts and web page links
   !insertmacro ExclusiveDetailPrint $(REMOVING_SHORTCUTS)
@@ -702,10 +705,13 @@ Section Uninstall
   RMDir /r "$INSTDIR\help"
   RMDir /r "$INSTDIR\ssl\certs"
   RMDir /r "$INSTDIR\ssl"
+  RMDir /r "$INSTDIR\fonts"
+  RMDir /r "$INSTDIR\etc"
   
   !insertmacro ExclusiveDetailPrint $(REMOVING_LIBRARIES)
   RMDir /r "$INSTDIR\share\symbols"
   RMDir /r "$INSTDIR\share\footprints"
+  RMDir /r "$INSTDIR\share\3dmodels"
   RMDir /r "$INSTDIR\share\kicad\template"
   RMDir /r "$INSTDIR\share\kicad\internat"
   RMDir /r "$INSTDIR\share\kicad\demos"
