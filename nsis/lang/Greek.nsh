@@ -10,10 +10,7 @@ LangString WELCOME_PAGE_TEXT ${LANG_GREEK} "Αυτό το πρόγραμμα ε�
 Κάντε κλικ στο Επόμενο για να συνεχίσετε."
 
 ;Error messages
-LangString ERROR_ADMIN_REQ  ${LANG_GREEK} "Απαιτούνται δικαιώματα διαχειριστή για να εγκατασταθεί το KiCad!"
-LangString ERROR_WIN9X      ${LANG_GREEK} "Σφάλμα! Δεν μπορεί να εκτελεστεί σε Windows 9x!"
 LangString ERROR_WIN_MIN    ${LANG_GREEK} "A minimum of Windows 8.1 is required to install KiCad using this installer"
-LangString ERROR_UNINSTALL_FIRST    ${LANG_GREEK} "You must run the uninstaller on your existing KiCad ${KICAD_VERSION} installation to proceed with installation"
 LangString ERROR_WRONG_ARCH         ${LANG_GREEK} "This installer is for a different processor architecture (${ARCH}), please use the correct installer"
 
 ;Other languages
@@ -36,6 +33,7 @@ LangString TITLE_SEC_PACKAGES3D ${LANG_GREEK} "Footprint 3d models"
 LangString TITLE_SEC_DEMOS ${LANG_GREEK} "Έργα επίδειξης"
 LangString TITLE_SEC_DOCS ${LANG_GREEK} "Αρχεία βοήθειας"
 LangString TITLE_SEC_FILE_ASSOC ${LANG_GREEK} "File associations"
+LangString TITLE_SEC_START_MENU ${LANG_GREEK} "Start menu shortcuts"
 
 ;Component option descriptions
 LangString DESC_SEC_MAIN ${LANG_GREEK} "Αρχεία κύριας εφαρμογής."
@@ -57,27 +55,39 @@ LangString DESC_SEC_DOCS_NL ${LANG_GREEK} "$(LANGUAGE_NAME_NL) $(TITLE_SEC_DOCS)
 LangString DESC_SEC_DOCS_PL ${LANG_GREEK} "$(LANGUAGE_NAME_PL) $(TITLE_SEC_DOCS)"
 LangString DESC_SEC_DOCS_ZH ${LANG_GREEK} "$(LANGUAGE_NAME_ZH) $(TITLE_SEC_DOCS)"
 LangString DESC_SEC_FILE_ASSOC ${LANG_GREEK} "Creates file associations for KiCad related files"
+LangString DESC_SEC_START_MENU ${LANG_GREEK} "Creates start menu shortcuts"
 
 ;File association descriptions (show in Windows Explorer)
 LangString FILE_DESC_KICAD_PCB ${LANG_GREEK} "KiCad Board"
 LangString FILE_DESC_SCH ${LANG_GREEK} "KiCad Schematic"
 LangString FILE_DESC_PRO ${LANG_GREEK} "KiCad Project"
-LangString FILE_DESC_KICAD_WKS ${LANG_GREEK} "KiCad Page Layout"
+LangString FILE_DESC_KICAD_WKS ${LANG_GREEK} "KiCad Drawing Sheet"
+LangString FILE_DESC_SYM ${LANG_GREEK} "KiCad Symbol"
+LangString FILE_DESC_FP ${LANG_GREEK} "KiCad Footprint"
 
 ;Application Friendly Names (for windows explorer hook)
 LangString APP_FRIENDLY_KICAD ${LANG_GREEK} "KiCad"
-LangString APP_FRIENDLY_PCBNEW ${LANG_GREEK} "KiCad - Pcbnew"
-LangString APP_FRIENDLY_EESCHEMA ${LANG_GREEK} "KiCad - Eeschema"
-LangString APP_FRIENDLY_PLEDITOR ${LANG_GREEK} "KiCad - Page Layout Editor"
+LangString APP_FRIENDLY_PCBNEW ${LANG_GREEK} "KiCad - PCB Editor"
+LangString APP_FRIENDLY_EESCHEMA ${LANG_GREEK} "KiCad - Schematic Editor"
+LangString APP_FRIENDLY_PLEDITOR ${LANG_GREEK} "KiCad - Drawing Sheet Editor"
 
 ;Application names
-LangString APP_NAME_KICAD ${LANG_GREEK} "KiCad"
-LangString APP_NAME_PCBNEW ${LANG_GREEK} "Pcbnew"
-LangString APP_NAME_EESCHEMA ${LANG_GREEK} "Eeschema"
-LangString APP_NAME_PLEDITOR ${LANG_GREEK} "Page Layout Editor"
-LangString APP_NAME_PCBCALCULATOR ${LANG_GREEK} "PCB Calculator"
-LangString APP_NAME_BITMAP2COMPONENT ${LANG_GREEK} "Bitmap to Component"
-LangString APP_NAME_GERBVIEW ${LANG_GREEK} "Gerbview"
+LangString APP_NAME_KICAD ${LANG_GREEK} "KiCad (kicad.exe)"
+LangString APP_NAME_PCBNEW ${LANG_GREEK} "PCB Editor (pcbnew.exe)"
+LangString APP_NAME_EESCHEMA ${LANG_GREEK} "Schematic Editor (eeschema.exe)"
+LangString APP_NAME_PLEDITOR ${LANG_GREEK} "Drawing Sheet Editor (pl_editor.exe)"
+LangString APP_NAME_PCBCALCULATOR ${LANG_GREEK} "PCB Calculator (pcb_calculator.exe)"
+LangString APP_NAME_BITMAP2COMPONENT ${LANG_GREEK} "Image Converter (bitmap2component.exe)"
+LangString APP_NAME_GERBVIEW ${LANG_GREEK} "Gerber Viewer (gerbview.exe)"
+
+;Shortcut names
+LangString SHORTCUT_NAME_EESCHEMA ${LANG_GREEK} "Schematic Editor ${KICAD_VERSION} (standalone)"
+LangString SHORTCUT_NAME_PCBNEW ${LANG_GREEK} "PCB Editor ${KICAD_VERSION} (standalone)"
+LangString SHORTCUT_NAME_GERBVIEW ${LANG_GREEK} "Gerber Viewer ${KICAD_VERSION}"
+LangString SHORTCUT_NAME_BITMAP2COMPONENT ${LANG_GREEK} "Image Converter ${KICAD_VERSION}"
+LangString SHORTCUT_NAME_PCBCALCULATOR ${LANG_GREEK} "Calculator Tools ${KICAD_VERSION}"
+LangString SHORTCUT_NAME_PLEDITOR ${LANG_GREEK} "Drawing Sheet Editor ${KICAD_VERSION}"
+LangString SHORTCUT_NAME_CMD ${LANG_GREEK} "KiCad ${KICAD_VERSION} Command Prompt"
 
 ;General messages
 LangString PROGRAM_IS_OPEN_ERROR ${LANG_GREEK} "$R1 is currently running! You must close the program before you are allowed continue."
