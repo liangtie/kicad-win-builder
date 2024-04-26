@@ -821,7 +821,7 @@ function Build-Vcpkg {
             git clone https://gitlab.com/kicad/packaging/vcpkg.git $vcpkgPath
         }
 
-        Set-Config -VcpkgPath $vcpkgPath -UseMsvcCmake $True
+        Set-Config -VcpkgPath $vcpkgPath 
 
         # get vcpkg alias updated
         Set-Aliases
