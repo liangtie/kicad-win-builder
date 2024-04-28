@@ -528,18 +528,16 @@ function Build-Kicad {
     }
 
     Get-Source -url https://github.com/SYSUeric66/vcpkg_installed.git `
-               -dest (Join-Path -Path $cmakeBuildFolder) `
+               -dest (Join-Path -Path (Get-Source-Path kicad) -ChildPath "build/$buildName") `
                -sourceType git `
                -latest $latest `
                -ref ("branch/main")
     
     $vcinstalledPath = Join-Path -Path $cmakeBuildFolder -ChildPath "/vcpkg_installed"
 
-    Push-Location ($vcinstalledPath)
-
     if (Test-Path -Path $vcinstalledPath) {
    
-        $gitFolderPath = "./.git"
+        $gitFolderPath = "$vcinstalledPath/.git"
 
         if (Test-Path -Path $gitFolderPath) {
             Remove-Item -Path $gitFolderPath -Recurse -Force
@@ -552,7 +550,6 @@ function Build-Kicad {
         Write-Host "$vcinstalledPath not exsist."
     }
 
-    Pop-Location
     
     $installPath = Join-Path -Path $BuilderPaths.OutRoot -ChildPath "$buildName/"
     $toolchainPath = Join-Path -Path $settings["VcpkgPath"] -ChildPath "/scripts/buildsystems/vcpkg.cmake"
