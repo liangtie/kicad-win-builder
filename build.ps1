@@ -532,7 +532,7 @@ function Build-Kicad {
     
     Write-Host "vcinstalledPath: $vcinstalledPath"
     
-    Get-Source -url https://gitlab.com/SYSUeric66/vcpkg_installed_kicad.git `
+    Get-Source -url https://github.com/SYSUeric66/vcpkg-installed.git `
                -dest $vcinstalledPath `
                -sourceType git `
                -latest $latest `
