@@ -528,7 +528,7 @@ function Build-Kicad {
     }
 
     Get-Source -url https://github.com/SYSUeric66/vcpkg_installed.git `
-               -dest $cmakeBuildFolder `
+               -dest (Join-Path -Path $cmakeBuildFolder) `
                -sourceType git `
                -latest $latest `
                -ref ("branch/main")
