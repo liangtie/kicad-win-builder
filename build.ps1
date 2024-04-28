@@ -526,51 +526,34 @@ function Build-Kicad {
     if($fresh) {
         Remove-Item $cmakeBuildFolder -Recurse -ErrorAction SilentlyContinue
     }
-    Write-Host "build fresh arg: $fresh"
-    
-    $vcinstalledPath = Join-Path -Path $cmakeBuildFolder -ChildPath "/vcpkg_installed"
-    
-    Write-Host "vcinstalledPath: $vcinstalledPath"
-    
-    Get-Source -url https://github.com/SYSUeric66/vcpkg-installed.git `
-               -dest $vcinstalledPath `
+
+    Get-Source -url https://github.com/SYSUeric66/vcpkg_installed.git `
+               -dest $cmakeBuildFolder `
                -sourceType git `
                -latest $latest `
-               -ref ("branch/master")
+               -ref ("branch/main")
     
-    $zipFilePath = Join-Path -Path $vcinstalledPath -ChildPath "/vcpkg_installed.7z"
+    $vcinstalledPath = Join-Path -Path $cmakeBuildFolder -ChildPath "/vcpkg_installed"
 
     Push-Location ($vcinstalledPath)
-    
-    Write-Host "current path: $vcinstalledPath"
-    
-    if (Test-Path -Path $zipFilePath) {
 
-        & 7za x -o"." $zipFilePath -aoa
-        
-        if ($LASTEXITCODE -eq 0) {
-            Write-Host "vcpkg_installed unzip success"
-            
-            Remove-Item -Path $zipFilePath -Force
-            Write-Host "delete $zipFilePath"
-            
-            $gitFolderPath = "./.git"
-            if (Test-Path -Path $gitFolderPath) {
-                Remove-Item -Path $gitFolderPath -Recurse -Force
-                Write-Host ".git was deleted success."
-            } else {
-                Write-Host ".git not exist, don't need to delete it."
-            }
+    if (Test-Path -Path $vcinstalledPath) {
+   
+        $gitFolderPath = "./.git"
+
+        if (Test-Path -Path $gitFolderPath) {
+            Remove-Item -Path $gitFolderPath -Recurse -Force
+            Remove-Item README.md -ErrorAction SilentlyContinue
+            Write-Host ".git was deleted success."
         } else {
-            Write-Host "unzip vcpkg_installed failed"
+            Write-Host ".git not exist, don't need to delete it."
         }
     } else {
-        Write-Host "zip file vcpkg_installed.7z not exist"
+        Write-Host "$vcinstalledPath not exsist."
     }
+
     Pop-Location
-
-
-
+    
     $installPath = Join-Path -Path $BuilderPaths.OutRoot -ChildPath "$buildName/"
     $toolchainPath = Join-Path -Path $settings["VcpkgPath"] -ChildPath "/scripts/buildsystems/vcpkg.cmake"
     $installPdbPath = Join-Path -Path $BuilderPaths.OutRoot -ChildPath "$buildName-pdb"
