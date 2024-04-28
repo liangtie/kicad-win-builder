@@ -526,6 +526,49 @@ function Build-Kicad {
     if($fresh) {
         Remove-Item $cmakeBuildFolder -Recurse -ErrorAction SilentlyContinue
     }
+    Write-Host "build fresh arg: $fresh"
+    
+    $vcinstalledPath = Join-Path -Path $cmakeBuildFolder -ChildPath "/vcpkg_installed"
+    
+    Write-Host "vcinstalledPath: $vcinstalledPath"
+    
+    Get-Source -url https://gitlab.com/SYSUeric66/vcpkg_installed_kicad.git `
+               -dest $vcinstalledPath `
+               -sourceType git `
+               -latest $latest `
+               -ref ("branch/master")
+    
+    $zipFilePath = Join-Path -Path $vcinstalledPath -ChildPath "/vcpkg_installed.7z"
+
+    Push-Location ($vcinstalledPath)
+    
+    Write-Host "current path: $vcinstalledPath"
+    
+    if (Test-Path -Path $zipFilePath) {
+
+        & 7za x -o"." $zipFilePath -aoa
+        
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "vcpkg_installed unzip success"
+            
+            Remove-Item -Path $zipFilePath -Force
+            Write-Host "delete $zipFilePath"
+            
+            $gitFolderPath = "./.git"
+            if (Test-Path -Path $gitFolderPath) {
+                Remove-Item -Path $gitFolderPath -Recurse -Force
+                Write-Host ".git was deleted success."
+            } else {
+                Write-Host ".git not exist, don't need to delete it."
+            }
+        } else {
+            Write-Host "unzip vcpkg_installed failed"
+        }
+    } else {
+        Write-Host "zip file vcpkg_installed.7z not exist"
+    }
+    Pop-Location
+
 
 
     $installPath = Join-Path -Path $BuilderPaths.OutRoot -ChildPath "$buildName/"
@@ -576,7 +619,8 @@ function Build-Kicad {
         '-DKICAD_WIN32_DPI_AWARE=ON',
         '-DVCPKG_MANIFEST_MODE=ON',
         "-DCMAKE_C_COMPILER=$cCompilerPath",
-        "-DCMAKE_CXX_COMPILER=$cxxCompilerPath"
+        "-DCMAKE_CXX_COMPILER=$cxxCompilerPath",
+        "-DKICAD_RUN_FROM_BUILD_DIR=1"
         
     )
 
