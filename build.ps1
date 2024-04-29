@@ -527,30 +527,6 @@ function Build-Kicad {
         Remove-Item $cmakeBuildFolder -Recurse -ErrorAction SilentlyContinue
     }
     
-    $vcinstalledPath = Join-Path -Path $cmakeBuildFolder -ChildPath "/vcpkg_installed"
-    Write-Host "vcinstalledPath: $vcinstalledPath."
-    Get-Source -url https://github.com/SYSUeric66/vcpkg_installed.git `
-               -dest $vcinstalledPath `
-               -sourceType git `
-               -latest $latest `
-               -ref ("branch/main")
-    
-    if (Test-Path -Path $vcinstalledPath) {
-   
-        $gitFolderPath = Join-Path -Path $vcinstalledPath -ChildPath "/.git"
-        Write-Host "gitFolderPath: $gitFolderPath."
-        if (Test-Path -Path $gitFolderPath) {
-            Remove-Item -Path $gitFolderPath -Recurse -Force
-            Remove-Item README.md -ErrorAction SilentlyContinue
-            Write-Host ".git was deleted success."
-        } else {
-            Write-Host ".git not exist, don't need to delete it."
-        }
-    } else {
-        Write-Host "$vcinstalledPath not exsist."
-    }
-
-    
     $installPath = Join-Path -Path $BuilderPaths.OutRoot -ChildPath "$buildName/"
     $toolchainPath = Join-Path -Path $settings["VcpkgPath"] -ChildPath "/scripts/buildsystems/vcpkg.cmake"
     $installPdbPath = Join-Path -Path $BuilderPaths.OutRoot -ChildPath "$buildName-pdb"
@@ -630,6 +606,10 @@ function Build-Kicad {
     $cmakeArgs += '.';
     # ignore cmake dumping to stderr
     # the boost warnings will cause it to treat it as a failed command
+    & vcpkg update
+    if ($LastExitCode -ne 0) {
+        Write-Host "Failure vcpkg update before cmake"
+    }
     & cmake $cmakeArgs  2>&1
     
     if ($LastExitCode -ne 0) {
