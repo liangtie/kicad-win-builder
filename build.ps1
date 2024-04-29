@@ -574,8 +574,6 @@ function Build-Kicad {
         '-DKICAD_BUILD_I18N=ON',
         '-DKICAD_WIN32_DPI_AWARE=ON',
         '-DVCPKG_MANIFEST_MODE=ON',
-        "-DCMAKE_C_COMPILER=$cCompilerPath",
-        "-DCMAKE_CXX_COMPILER=$cxxCompilerPath",
         "-DKICAD_RUN_FROM_BUILD_DIR=1"
         
     )
