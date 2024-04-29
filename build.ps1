@@ -581,7 +581,7 @@ function Build-Kicad {
     )
 
     if( $arch -ne [Arch]::arm64 ) {
-        $cmakeArgs += '-DKICAD_SCRIPTING_WXPYTHON=ON';
+        $cmakeArgs += '-DKICAD_SCRIPTING_WXPYTHON=OFF';
         if( $settings.SentryDsn -ne "" ) {
             $cmakeArgs += '-DKICAD_USE_SENTRY=ON';
             $cmakeArgs += "-DKICAD_SENTRY_DSN=$($settings.SentryDsn)";
@@ -606,59 +606,16 @@ function Build-Kicad {
     $cmakeArgs += '.';
     # ignore cmake dumping to stderr
     # the boost warnings will cause it to treat it as a failed command
-    & vcpkg update
-    if ($LastExitCode -ne 0) {
-        Write-Host "Failure vcpkg update before cmake"
-    }
+
+    #if ($LastExitCode -ne 0) {
+    #    Write-Host "Failure vcpkg update before cmake"
+    #}
+    
     & cmake $cmakeArgs  2>&1
     
     if ($LastExitCode -ne 0) {
-        Write-Host "Failure generating cmake, try to vcpkg update"
-        & vcpkg update
-        if ($LastExitCode -ne 0) {
-            Write-Host "Failure vcpkg update"
-        }
-        else{
-            Write-Host "success vcpkg update, try to generate cmake again"
-        }
-        
-        & cmake $cmakeArgs  2>&1
-        
-        if ($LastExitCode -ne 0) {
-            Write-Host "Failure generating cmake again, try to download backup depend"
+        Write-Host "Failure generating cmake"
 
-            $vcinstalledPath = Join-Path -Path $cmakeBuildFolder -ChildPath "/vcpkg_installed"
-            Remove-Item $vcinstalledPath -Recurse -ErrorAction SilentlyContinue
-            Write-Host "remove items under vcinstalledPath: $vcinstalledPath."
-            Get-Source -url https://github.com/SYSUeric66/vcpkg_installed.git `
-                       -dest $vcinstalledPath `
-                       -sourceType git `
-                       -latest $latest `
-                       -ref ("branch/main")
-            
-            if (Test-Path -Path $vcinstalledPath) {
-           
-                $gitFolderPath = Join-Path -Path $vcinstalledPath -ChildPath "/.git"
-                Write-Host "gitFolderPath: $gitFolderPath."
-                if (Test-Path -Path $gitFolderPath) {
-                    Remove-Item -Path $gitFolderPath -Recurse -Force
-                    Remove-Item README.md -ErrorAction SilentlyContinue
-                    Write-Host ".git was deleted success."
-                    Write-Host "after download backup packages, try to generating cmake again"
-                    & cmake $cmakeArgs  2>&1
-                    if ($LastExitCode -ne 0) {
-                        Write-Error "Failure generating cmake again after download backup packages"
-                        Pop-Location
-                        Exit [ExitCodes]::CMakeGenerationFailure
-                    }
-                } else {
-                    Write-Host ".git not exist, don't need to delete it."
-                }
-            } else {
-                Write-Host "$vcinstalledPath not exsist."
-            }
-        }
-        
     }
     
     Write-Host "Invoking cmake build" -ForegroundColor Yellow
@@ -915,7 +872,7 @@ function Build-Vcpkg {
             git reset --hard origin/kicad
         }
     }
-
+    git pull
     .\bootstrap-vcpkg.bat
     Set-Aliases
     & vcpkg update
