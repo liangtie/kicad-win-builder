@@ -631,14 +631,22 @@ function Build-Kicad {
     # ignore cmake dumping to stderr
     # the boost warnings will cause it to treat it as a failed command
     & cmake $cmakeArgs  2>&1
-
+    
     if ($LastExitCode -ne 0) {
         Write-Error "Failure generating cmake"
+        
         Pop-Location
         Exit [ExitCodes]::CMakeGenerationFailure
     } else {
         Write-Host "Invoking cmake build" -ForegroundColor Yellow
-
+        
+        & vcpkg update
+        if ($LastExitCode -ne 0) {
+            Write-Host "Failure vcpkg update"
+        }
+        
+        & cmake $cmakeArgs  2>&1
+        
         & {
             $ErrorActionPreference = 'SilentlyContinue'
             cmake --build $cmakeBuildFolder -j 2>&1 | % ToString
@@ -709,7 +717,7 @@ function Start-Build {
                -sourceType git `
                -latest $latest `
                -ref (Get-Source-Ref -sourceKey "templates")
-
+    
     Build-KiCad -arch $arch -buildType $buildType
     Build-Library-Source -arch $arch -buildType $buildType -libraryFolderName kicad-symbols
     Build-Library-Source -arch $arch -buildType $buildType -libraryFolderName kicad-footprints
@@ -893,6 +901,8 @@ function Build-Vcpkg {
     }
 
     .\bootstrap-vcpkg.bat
+    Set-Aliases
+    & vcpkg update
 
     if(-Not $buildConfig.vcpkg.manifest_mode) {
         # Setup dependencies
