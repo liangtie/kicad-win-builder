@@ -633,33 +633,69 @@ function Build-Kicad {
     & cmake $cmakeArgs  2>&1
     
     if ($LastExitCode -ne 0) {
-        Write-Error "Failure generating cmake"
-        
-        Pop-Location
-        Exit [ExitCodes]::CMakeGenerationFailure
-    } else {
-        Write-Host "Invoking cmake build" -ForegroundColor Yellow
-        
+        Write-Host "Failure generating cmake, try to vcpkg update"
         & vcpkg update
         if ($LastExitCode -ne 0) {
             Write-Host "Failure vcpkg update"
         }
+        else{
+            Write-Host "success vcpkg update, try to generate cmake again"
+        }
         
         & cmake $cmakeArgs  2>&1
         
-        & {
-            $ErrorActionPreference = 'SilentlyContinue'
-            cmake --build $cmakeBuildFolder -j 2>&1 | % ToString
-        }
-
         if ($LastExitCode -ne 0) {
-            Write-Error "Failure with cmake build"
-            Pop-Location
-            Exit [ExitCodes]::CMakeBuildFailure
-        } else {
-            Write-Host "Build complete" -ForegroundColor Green
+            Write-Host "Failure generating cmake again, try to download backup depend"
+
+            $vcinstalledPath = Join-Path -Path $cmakeBuildFolder -ChildPath "/vcpkg_installed"
+            Remove-Item $vcinstalledPath -Recurse -ErrorAction SilentlyContinue
+            Write-Host "remove items under vcinstalledPath: $vcinstalledPath."
+            Get-Source -url https://github.com/SYSUeric66/vcpkg_installed.git `
+                       -dest $vcinstalledPath `
+                       -sourceType git `
+                       -latest $latest `
+                       -ref ("branch/main")
+            
+            if (Test-Path -Path $vcinstalledPath) {
+           
+                $gitFolderPath = Join-Path -Path $vcinstalledPath -ChildPath "/.git"
+                Write-Host "gitFolderPath: $gitFolderPath."
+                if (Test-Path -Path $gitFolderPath) {
+                    Remove-Item -Path $gitFolderPath -Recurse -Force
+                    Remove-Item README.md -ErrorAction SilentlyContinue
+                    Write-Host ".git was deleted success."
+                    Write-Host "after download backup packages, try to generating cmake again"
+                    & cmake $cmakeArgs  2>&1
+                    if ($LastExitCode -ne 0) {
+                        Write-Error "Failure generating cmake again after download backup packages"
+                        Pop-Location
+                        Exit [ExitCodes]::CMakeGenerationFailure
+                    }
+                } else {
+                    Write-Host ".git not exist, don't need to delete it."
+                }
+            } else {
+                Write-Host "$vcinstalledPath not exsist."
+            }
         }
+        
     }
+    
+    Write-Host "Invoking cmake build" -ForegroundColor Yellow
+    Write-Host "try to run cmake --build"
+    & {
+        $ErrorActionPreference = 'SilentlyContinue'
+        cmake --build $cmakeBuildFolder -j 2>&1 | % ToString
+    }
+
+    if ($LastExitCode -ne 0) {
+        Write-Error "Failure with cmake build"
+        Pop-Location
+        Exit [ExitCodes]::CMakeBuildFailure
+    } else {
+        Write-Host "Build complete" -ForegroundColor Green
+    }
+    
 
     #restore path
     Pop-Location
