@@ -863,6 +863,7 @@ function Build-Vcpkg {
 
         git fetch
         if($buildConfig.vcpkg.manifest_mode) {
+            Write-Host "vcpkg.manifest_mode: start git reset --hard $vcpkgCommit"
             git checkout master
             git reset --hard $vcpkgCommit
         } else {
@@ -870,10 +871,13 @@ function Build-Vcpkg {
             git reset --hard origin/kicad
         }
     }
+    Write-Host "start git pull vcpkg port"
     git pull
     .\bootstrap-vcpkg.bat
     Set-Aliases
+    & vcpkg upgrade
     & vcpkg update
+    
 
     if(-Not $buildConfig.vcpkg.manifest_mode) {
         # Setup dependencies
@@ -1211,9 +1215,9 @@ function Start-Prepare-Package {
     Patch-Python-Manifest -PythonRoot $destBin
 
     ## now libxslt
-    $xsltprocSource = "$vcpkgInstalledRootPrimary\tools\libxslt\xsltproc.exe"
-    Write-Host "Copying $xsltprocSource to $destBin"
-    Copy-Item $xsltprocSource -Destination $destBin -Recurse  -Force
+    # $xsltprocSource = "$vcpkgInstalledRootPrimary\tools\libxslt\xsltproc.exe"
+    # Write-Host "Copying $xsltprocSource to $destBin"
+    # Copy-Item $xsltprocSource -Destination $destBin -Recurse  -Force
 
     if( $sign ) {
         Get-ChildItem $destBin -Recurse -Filter *.exe |
