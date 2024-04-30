@@ -579,7 +579,7 @@ function Build-Kicad {
     )
 
     if( $arch -ne [Arch]::arm64 ) {
-        $cmakeArgs += '-DKICAD_SCRIPTING_WXPYTHON=OFF';
+        $cmakeArgs += '-DKICAD_SCRIPTING_WXPYTHON=ON';
         if( $settings.SentryDsn -ne "" ) {
             $cmakeArgs += '-DKICAD_USE_SENTRY=ON';
             $cmakeArgs += "-DKICAD_SENTRY_DSN=$($settings.SentryDsn)";
