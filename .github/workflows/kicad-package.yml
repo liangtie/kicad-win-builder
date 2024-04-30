@@ -46,8 +46,8 @@ jobs:
             .downloads
             .support
 
-      # - name: install wxPython
-      #   run: pip install -r ./requirements.txt
+      - name: install wxPython
+        run: pip install -r ./requirements.txt
 
       - name: Triggers a build
         run: ./build.ps1 -Build -Latest -Arch x64 -BuildType Release
