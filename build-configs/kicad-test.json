@@ -1,6 +1,6 @@
 {
     "name:": "HQ-KiCad-Test ",
-    "output_prefix": "kicad-test",
+    "output_prefix": "hq-kicad-",
     "package_version": "8.0.2-rc1",
     "train": "stable",
     "build_mode": "Release",
