@@ -1,7 +1,7 @@
 {
-    "name:": "HQ-KiCad 8.0.2-rc1 ",
+    "name:": "HQ-KiCad 8.0.2-rc2 ",
     "output_prefix": "hq-kicad-",
-    "package_version": "8.0.2-rc1",
+    "package_version": "8.0.2-rc2",
     "train": "stable",
     "build_mode": "Release",
     "nsis": {
