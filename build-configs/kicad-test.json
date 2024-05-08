@@ -9,7 +9,7 @@
     },
     "sources": {
         "kicad": {
-            "ref": "branch/master"
+            "ref": "branch/hq-mps-to-8.0"
         },
         "symbols": {
             "ref": "tag/8.0.1"
