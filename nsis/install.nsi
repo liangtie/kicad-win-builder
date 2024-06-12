@@ -40,7 +40,7 @@
 !include "Sections.nsh"
 
 ; General Product Description Definitions
-!define PRODUCT_NAME "KiCad"
+!define PRODUCT_NAME "KiCad华秋"
 !define KICAD_MAIN_SITE "www.kicad.org/"
 !define COMPANY_NAME "KiCad"
 !define TRADE_MARKS ""
@@ -571,7 +571,7 @@ Section $(TITLE_SEC_START_MENU) SEC08
   RMDir /r "${SMPATH}"
   CreateDirectory "${SMPATH}"
   CreateShortCut "${SMPATH}\Uninstall.lnk" "$INSTDIR\uninstaller.exe"
-  CreateShortCut "${SMPATH}\KiCad ${KICAD_VERSION}.lnk" "$INSTDIR\bin\kicad.exe"
+  CreateShortCut "${SMPATH}\KiCad华秋 ${KICAD_VERSION}.lnk" "$INSTDIR\bin\kicad.exe"
   CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_EESCHEMA).lnk" "$INSTDIR\bin\eeschema.exe"
   CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_PCBNEW).lnk" "$INSTDIR\bin\pcbnew.exe"
   CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_GERBVIEW).lnk" "$INSTDIR\bin\gerbview.exe"

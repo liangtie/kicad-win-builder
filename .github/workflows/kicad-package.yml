@@ -72,7 +72,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./.out/hq-kicad-8.0.2-rc2-x86_64.exe
+          file: ./.out/hq-kicad-8.0.3-x86_64.exe
           asset_name: hq-kicad-${{ steps.latest-release.outputs.tag }}-x86_64.exe
           overwrite: true
           tag: ${{ steps.latest-release.outputs.tag }}

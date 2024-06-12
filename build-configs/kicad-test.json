@@ -1,7 +1,7 @@
 {
-    "name:": "HQ-KiCad 8.0.2-rc2 ",
+    "name:": "HQ-KiCad 8.0.3 ",
     "output_prefix": "hq-kicad-",
-    "package_version": "8.0.2-rc2",
+    "package_version": "8.0.3",
     "train": "stable",
     "build_mode": "Release",
     "nsis": {
@@ -9,19 +9,19 @@
     },
     "sources": {
         "kicad": {
-            "ref": "branch/hq-mps-to-8.0"
+            "ref": "branch/hq-kicad-8.0"
         },
         "symbols": {
-            "ref": "tag/8.0.1"
+            "ref": "tag/8.0.3"
         },
         "footprints": {
-            "ref": "tag/8.0.1"
+            "ref": "tag/8.0.3"
         },
         "3dmodels": {
-            "ref": "tag/8.0.1"
+            "ref": "tag/8.0.3"
         },
         "templates": {
-            "ref": "tag/8.0.1"
+            "ref": "tag/8.0.3"
         }
     }, 
     "vcpkg": {
