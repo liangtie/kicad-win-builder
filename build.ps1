@@ -530,11 +530,12 @@ function Build-Kicad {
     $cmakeBuildFolder = "build/$buildName"
     $generator = "Ninja"
 
-    #delete the old build folderhttps://gitlab.com/kicad/code/kicad.git
+    #delete the old build folder https://gitlab.com/kicad/code/kicad.git
     if($fresh) {
         Remove-Item $cmakeBuildFolder -Recurse -ErrorAction SilentlyContinue
     }
-    
+
+
     $installPath = Join-Path -Path $BuilderPaths.OutRoot -ChildPath "$buildName/"
     $toolchainPath = Join-Path -Path $settings["VcpkgPath"] -ChildPath "/scripts/buildsystems/vcpkg.cmake"
     $installPdbPath = Join-Path -Path $BuilderPaths.OutRoot -ChildPath "$buildName-pdb"
@@ -545,27 +546,6 @@ function Build-Kicad {
     Write-Host "Configured install directory: $installPath"
     Write-Host "Vcpkg Path: $toolchainPath"
 
-    Set-Aliases
-    
-    $msvcInfo = & vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "Failed to find a suitable MSVC installation."
-        exit 1
-    }
-    
-    $vcInstallDir = Join-Path $msvcInfo "VC"
-    $cCompilerPath = Join-Path $vcInstallDir "Tools\MSVC\*\bin\Hostx64\x64\cl.exe"
-    $cxxCompilerPath = $cCompilerPath.Replace("cl.exe", "cl.exe")
-    
-    $cCompilerPath = (Resolve-Path $cCompilerPath).Path
-    $cxxCompilerPath = (Resolve-Path $cxxCompilerPath).Path
-    
-    if (-not (Test-Path $cCompilerPath) -or -not (Test-Path $cxxCompilerPath)) {
-        Write-Host "Unable to locate C/C++ compilers at the specified paths."
-        exit 1
-    }
-    
-    
     $cmakeArgs = @(
         '-G',
         $generator,
@@ -580,10 +560,7 @@ function Build-Kicad {
         "-DCMAKE_MAKE_PROGRAM=$env:NINJA_PATH",
         '-DKICAD_BUILD_QA_TESTS=OFF',
         '-DKICAD_BUILD_I18N=ON',
-        '-DKICAD_WIN32_DPI_AWARE=ON',
-        '-DVCPKG_MANIFEST_MODE=ON',
-        "-DKICAD_RUN_FROM_BUILD_DIR=1"
-        
+        '-DKICAD_WIN32_DPI_AWARE=ON'
     )
 
     if( $arch -ne [Arch]::arm64 ) {
@@ -612,36 +589,42 @@ function Build-Kicad {
     $cmakeArgs += '.';
     # ignore cmake dumping to stderr
     # the boost warnings will cause it to treat it as a failed command
-
-    #if ($LastExitCode -ne 0) {
-    #    Write-Host "Failure vcpkg update before cmake"
-    #}
-    
     & cmake $cmakeArgs  2>&1
-    
-    if ($LastExitCode -ne 0) {
-        Write-Host "Failure generating cmake"
-
-    }
-    
-    Write-Host "Invoking cmake build" -ForegroundColor Yellow
-    Write-Host "try to run cmake --build"
-    & {
-        $ErrorActionPreference = 'SilentlyContinue'
-        cmake --build $cmakeBuildFolder -j 2>&1 | % ToString
-    }
 
     if ($LastExitCode -ne 0) {
-        Write-Error "Failure with cmake build"
+        Write-Error "Failure generating cmake"
         Pop-Location
-        Exit [ExitCodes]::CMakeBuildFailure
+        Exit [ExitCodes]::CMakeGenerationFailure
     } else {
-        Write-Host "Build complete" -ForegroundColor Green
+        Write-Host "Invoking cmake build" -ForegroundColor Yellow
+
+        & {
+            $ErrorActionPreference = 'SilentlyContinue'
+            cmake --build $cmakeBuildFolder -j 2>&1 | % ToString
+        }
+
+        if ($LastExitCode -ne 0) {
+            Write-Error "Failure with cmake build"
+            Pop-Location
+            Exit [ExitCodes]::CMakeBuildFailure
+        } else {
+            Write-Host "Build complete" -ForegroundColor Green
+        }
     }
-    
 
     #restore path
     Pop-Location
+}
+
+function script:Get-Source-Repo ([string] $sourceKey, [string] $defaultRepo) {
+    if(  $buildConfig.sources.PSObject.Properties.Match($sourceKey) )
+    {
+        if( $buildConfig.sources.$sourceKey.PSobject.Properties.Name -contains "repo" )
+        {
+            return $buildConfig.sources.$sourceKey.repo
+        }    
+    }
+    return $defaultRepo
 }
 
 function script:Get-Source-Ref ([string] $sourceKey) {
@@ -879,12 +862,12 @@ function Build-Vcpkg {
             git reset --hard origin/kicad
         }
     }
-    Write-Host "start git pull vcpkg port"
-    git pull
+    # Write-Host "start git pull vcpkg port"
+    # git pull
     .\bootstrap-vcpkg.bat
-    Set-Aliases
-    & vcpkg upgrade
-    & vcpkg update
+    # Set-Aliases
+    # & vcpkg upgrade
+    # & vcpkg update
     
 
     if(-Not $buildConfig.vcpkg.manifest_mode) {
@@ -1241,9 +1224,11 @@ function Start-Prepare-Package {
     Patch-Python-Manifest -PythonRoot $destBin
 
     ## now libxslt
-    # $xsltprocSource = "$vcpkgInstalledRootPrimary\tools\libxslt\xsltproc.exe"
-    # Write-Host "Copying $xsltprocSource to $destBin"
-    # Copy-Item $xsltprocSource -Destination $destBin -Recurse  -Force
+    $xsltprocSource = "$vcpkgInstalledRootPrimary\tools\libxslt\xsltproc.exe"
+    if( Test-Path -Path $xsltprocSource ) {
+        Write-Host "Copying $xsltprocSource to $destBin"
+        Copy-Item $xsltprocSource -Destination $destBin -Recurse  -Force
+    }
 
     if( $sign ) {
         Get-ChildItem $destBin -Recurse -Filter *.exe |
@@ -1307,6 +1292,9 @@ function Start-Package-Nsis {
 
     $packageVersion = Get-KiCad-PackageVersion
     $kicadVersion = Get-KiCad-Version
+    
+    # needed to copy vcredist
+    Set-MSVCEnvironment -Arch $arch -VersionMin $settings.VsVersionMin -VersionMax $settings.VsVersionMax
 
     $nsisArch = Get-NSISArch -Arch $arch
 
@@ -1325,8 +1313,19 @@ function Start-Package-Nsis {
 
     ## now nsis
     $nsisSource = Join-Path -Path $PSScriptRoot -ChildPath "nsis\"
-    Write-Host "Copying nsis $nsisSource to $nsisDest"
+    Write-Host "Copying nsis $nsisSource to $destRoot"
     Copy-Item $nsisSource -Destination $destRoot -Recurse -Container -Force
+
+    ## copy redist over to nsis folder from MSVC itself
+    $vcredistDest = Join-Path -Path $destRoot -ChildPath "nsis\vcredist\"
+    if( -not (Test-Path $vcredistDest) ) {
+        New-Item -Path $vcredistDest -ItemType "directory"
+    }
+    Copy-Item -Path "$env:VCToolsRedistDir\*" -Destination $vcredistDest -Include vc_redist*
+
+    ## default
+    $redistVersion = [System.Diagnostics.FileVersionInfo]::GetVersionInfo("$env:VCToolsRedistDir\vc_redist.x64.exe")
+    $vcredistBuild = $redistVersion.FileBuildPart
 
     ## Run NSIS
     $nsisScript = Join-Path -Path $destRoot -ChildPath "nsis\$($buildConfig.nsis.file)"
@@ -1372,6 +1371,7 @@ function Start-Package-Nsis {
             /DOUTFILE="..\..\$outFileName" `
             /DARCH="$nsisArch" `
             /DLIBRARIES_TAG="$libRefName" `
+            /DVCRUNTIME_MINIMUM_BLD="$vcredistBuild" `
             /DMSVC `
             "$nsisScript"
     }
@@ -1381,6 +1381,7 @@ function Start-Package-Nsis {
             /DKICAD_VERSION=$kicadVersion `
             /DOUTFILE="..\..\$outFileName" `
             /DARCH="$nsisArch" `
+            /DVCRUNTIME_MINIMUM_BLD="$vcredistBuild" `
             /DMSVC `
             "$nsisScript"
     }
