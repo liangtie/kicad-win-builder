@@ -1089,7 +1089,7 @@ function Start-Prepare-Package {
         Install-Library -arch $arch -buildType $buildType -libraryFolderName kicad-templates
     }
 
-    $desthqPlugin = Join-Path -Path $destShare -ChildPath "share\kicad\resources\"
+    $desthqPlugin = Join-Path -Path $destShare -ChildPath "share\kicad\resources\hqplugins"
     
     Get-Tool -ToolName "HQPCB" `
              -Url $hqpcbDownload `
