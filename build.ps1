@@ -210,14 +210,6 @@ $s5cmdFolderName = "s5cmd_1.4.0_Windows-64bit"
 $sentryCliDownload = 'https://github.com/getsentry/sentry-cli/releases/download/1.74.3/sentry-cli-Windows-x86_64.exe'
 $sentryCliChecksum = "0D2F372D98F53EA4D4DF26161F1F821D5322B00A0227CE84EC939BF271C720AD"
 
-$hqpcbPluginName = (Get-Source-Ref -sourceKey "hqpcb")
-$hqpcbDownload = "https://gitee.com/HQNEXTPCB/hq-kicad-plugin-release/raw/master/$hqpcbPluginName.zip"
-$hqpcbChecksum = (Get-Source-Ref -sourceKey "hqpcb-sha256")
-
-$hqdfmPluginName = (Get-Source-Ref -sourceKey "hqdfm")
-$hqdfmDownload = "https://gitee.com/HQNEXTPCB/kicad-hqdfm-plugin-release/raw/master/$hqdfmPluginName.zip"
-$hqdfmChecksum = (Get-Source-Ref -sourceKey "hqdfm-sha256")
-
 
 $7zaFolderName = "7z2201-extra"
 
@@ -993,6 +985,13 @@ function Sign-File {
     }
 }
 
+$hqpcbPluginName = (Get-Source-Ref -sourceKey "hqpcb")
+$hqpcbDownload = "https://gitee.com/HQNEXTPCB/hq-kicad-plugin-release/raw/master/$hqpcbPluginName.zip"
+$hqpcbChecksum = (Get-Source-Ref -sourceKey "hqpcb-sha256")
+
+$hqdfmPluginName = (Get-Source-Ref -sourceKey "hqdfm")
+$hqdfmDownload = "https://gitee.com/HQNEXTPCB/kicad-hqdfm-plugin-release/raw/master/$hqdfmPluginName.zip"
+$hqdfmChecksum = (Get-Source-Ref -sourceKey "hqdfm-sha256")
 
 function Start-Prepare-Package {
     [CmdletBinding()]
