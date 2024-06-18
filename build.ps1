@@ -854,12 +854,12 @@ function Build-Vcpkg {
             git reset --hard origin/kicad
         }
     }
-    # Write-Host "start git pull vcpkg port"
-    # git pull
+    Write-Host "start git pull vcpkg port"
+    git pull
     .\bootstrap-vcpkg.bat
-    # Set-Aliases
-    # & vcpkg upgrade
-    # & vcpkg update
+    Set-Aliases
+    & vcpkg upgrade
+    & vcpkg update
     
 
     if(-Not $buildConfig.vcpkg.manifest_mode) {
