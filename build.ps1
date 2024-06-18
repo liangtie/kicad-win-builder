@@ -538,6 +538,27 @@ function Build-Kicad {
     Write-Host "Configured install directory: $installPath"
     Write-Host "Vcpkg Path: $toolchainPath"
 
+    Set-Aliases
+
+    $msvcInfo = & vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Failed to find a suitable MSVC installation."
+        exit 1
+    }
+
+    $vcInstallDir = Join-Path $msvcInfo "VC"
+    $cCompilerPath = Join-Path $vcInstallDir "Tools\MSVC\*\bin\Hostx64\x64\cl.exe"
+    $cxxCompilerPath = $cCompilerPath.Replace("cl.exe", "cl.exe")
+
+    $cCompilerPath = (Resolve-Path $cCompilerPath).Path
+    $cxxCompilerPath = (Resolve-Path $cxxCompilerPath).Path
+
+    if (-not (Test-Path $cCompilerPath) -or -not (Test-Path $cxxCompilerPath)) {
+        Write-Host "Unable to locate C/C++ compilers at the specified paths."
+        exit 1
+    }
+
+
     $cmakeArgs = @(
         '-G',
         $generator,
@@ -552,7 +573,9 @@ function Build-Kicad {
         "-DCMAKE_MAKE_PROGRAM=$env:NINJA_PATH",
         '-DKICAD_BUILD_QA_TESTS=OFF',
         '-DKICAD_BUILD_I18N=ON',
-        '-DKICAD_WIN32_DPI_AWARE=ON'
+        '-DKICAD_WIN32_DPI_AWARE=ON',
+        '-DVCPKG_MANIFEST_MODE=ON',
+        "-DKICAD_RUN_FROM_BUILD_DIR=1"
     )
 
     if( $arch -ne [Arch]::arm64 ) {
