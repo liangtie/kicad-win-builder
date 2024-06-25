@@ -40,7 +40,7 @@
 !include "Sections.nsh"
 
 ; General Product Description Definitions
-!define PRODUCT_NAME "KiCad华秋"
+!define PRODUCT_NAME "KiCad Huaqiu"
 !define KICAD_MAIN_SITE "www.kicad.org/"
 !define COMPANY_NAME "KiCad"
 !define TRADE_MARKS ""
@@ -312,7 +312,9 @@ FunctionEnd
 
 !ifdef MSVC
 Section -Prerequisites
-  !define VCRUNTIME_MINIMUM_BLD 32532 
+  !ifndef VCRUNTIME_MINIMUM_BLD
+  !define VCRUNTIME_MINIMUM_BLD 32532
+  !endif
   !if ${ARCH} == 'x86_64'
     ReadRegDword $R1 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Installed"
     ReadRegDword $R2 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Bld"
@@ -571,7 +573,7 @@ Section $(TITLE_SEC_START_MENU) SEC08
   RMDir /r "${SMPATH}"
   CreateDirectory "${SMPATH}"
   CreateShortCut "${SMPATH}\Uninstall.lnk" "$INSTDIR\uninstaller.exe"
-  CreateShortCut "${SMPATH}\KiCad华秋 ${KICAD_VERSION}.lnk" "$INSTDIR\bin\kicad.exe"
+  CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_KICAD) ${KICAD_VERSION}.lnk" "$INSTDIR\bin\kicad.exe"
   CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_EESCHEMA).lnk" "$INSTDIR\bin\eeschema.exe"
   CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_PCBNEW).lnk" "$INSTDIR\bin\pcbnew.exe"
   CreateShortCut "${SMPATH}\$(SHORTCUT_NAME_GERBVIEW).lnk" "$INSTDIR\bin\gerbview.exe"
@@ -584,7 +586,7 @@ SectionEnd
 
 Section -CreateDesktopShortcut
   !insertmacro ExclusiveDetailPrint $(CREATING_SHORTCUTS)
-  CreateShortCut "$DESKTOP\KiCad ${KICAD_VERSION}.lnk" "$INSTDIR\bin\kicad.exe"
+  CreateShortCut "$DESKTOP\$(SHORTCUT_NAME_KICAD) ${KICAD_VERSION}.lnk" "$INSTDIR\bin\kicad.exe"
 SectionEnd
 
 Section -CreateAddRemoveEntry

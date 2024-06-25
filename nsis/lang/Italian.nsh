@@ -81,6 +81,7 @@ LangString APP_NAME_BITMAP2COMPONENT ${LANG_ITALIAN} "Image Converter (bitmap2co
 LangString APP_NAME_GERBVIEW ${LANG_ITALIAN} "Gerber Viewer (gerbview.exe)"
 
 ;Shortcut names
+LangString SHORTCUT_NAME_KICAD ${LANG_ITALIAN} "KiCad Huaqiu"
 LangString SHORTCUT_NAME_EESCHEMA ${LANG_ITALIAN} "Schematic Editor ${KICAD_VERSION} (standalone)"
 LangString SHORTCUT_NAME_PCBNEW ${LANG_ITALIAN} "PCB Editor ${KICAD_VERSION} (standalone)"
 LangString SHORTCUT_NAME_GERBVIEW ${LANG_ITALIAN} "Gerber Viewer ${KICAD_VERSION}"

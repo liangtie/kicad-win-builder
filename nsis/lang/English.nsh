@@ -4,7 +4,7 @@
 LicenseLangString MUILicense ${LANG_ENGLISH} "..\COPYRIGHT.txt"
 
 ;Welcome page
-LangString WELCOME_PAGE_TEXT ${LANG_ENGLISH} "This installer will guide you through the installation of KiCad华秋 ${PACKAGE_VERSION}.$\r$\n$\r$\n\
+LangString WELCOME_PAGE_TEXT ${LANG_ENGLISH} "This installer will guide you through the installation of KiCadHQ ${PACKAGE_VERSION}.$\r$\n$\r$\n\
 It is not required to close any other applications before starting the installer, neither is it necessary to reboot your computer.$\r$\n$\r$\n\
 This is free open source software licensed under the GPL.$\r$\n$\r$\n\
 Click Next to continue."
@@ -81,6 +81,7 @@ LangString APP_NAME_BITMAP2COMPONENT ${LANG_ENGLISH} "Image Converter (bitmap2co
 LangString APP_NAME_GERBVIEW ${LANG_ENGLISH} "Gerber Viewer (gerbview.exe)"
 
 ;Shortcut names
+LangString SHORTCUT_NAME_KICAD ${LANG_ENGLISH} "KiCad Huaqiu"
 LangString SHORTCUT_NAME_EESCHEMA ${LANG_ENGLISH} "Schematic Editor ${KICAD_VERSION} (standalone)"
 LangString SHORTCUT_NAME_PCBNEW ${LANG_ENGLISH} "PCB Editor ${KICAD_VERSION} (standalone)"
 LangString SHORTCUT_NAME_GERBVIEW ${LANG_ENGLISH} "Gerber Viewer ${KICAD_VERSION}"

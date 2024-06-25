@@ -1078,6 +1078,32 @@ function Start-Prepare-Package {
 
     Install-Kicad -arch $arch -buildType $buildType
 
+    $desthqPlugin = Join-Path -Path $destShare -ChildPath "kicad\resources\hqplugins\"
+
+    Write-Host "desthqPlugin: $desthqPlugin"
+
+    if( -not (Test-Path $desthqPlugin ) )
+    {
+        Write-Host "Destination directory $desthqPlugin does not exist. Creating it..."
+        New-Item -ItemType "directory" -Path $desthqPlugin -Force
+    }
+
+    Get-Tool -ToolName "HQPCB" `
+             -Url $hqpcbDownload `
+             -DestPath (Join-Path -Path $desthqPlugin -ChildPath "$hqpcbPluginName.zip") `
+             -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "$hqpcbPluginName.zip") `
+             -Checksum $hqpcbChecksum `
+             -ExtractZip $False `
+             -ExtractInSupportRoot $False
+
+    Get-Tool -ToolName "HQDFM" `
+             -Url $hqdfmDownload `
+             -DestPath (Join-Path -Path $desthqPlugin -ChildPath "$hqdfmPluginName.zip") `
+             -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "$hqdfmPluginName.zip") `
+             -Checksum $hqdfmChecksum `
+             -ExtractZip $False `
+             -ExtractInSupportRoot $False
+
     # Perfect time to create the sentry artifact
     if( $sentryArtifact ) {
         $outFileName = "$($buildConfig.output_prefix)$packageVersion-$nsisArch-sentry.zip"
@@ -1111,24 +1137,7 @@ function Start-Prepare-Package {
         Install-Library -arch $arch -buildType $buildType -libraryFolderName kicad-templates
     }
 
-    $desthqPlugin = Join-Path -Path $destShare -ChildPath "share\kicad\resources\hqplugins"
-    
-    Get-Tool -ToolName "HQPCB" `
-             -Url $hqpcbDownload `
-             -DestPath (Join-Path -Path $desthqPlugin -ChildPath $hqpcbPluginName) `
-             -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "$hqpcbPluginName.zip") `
-             -Checksum $hqpcbChecksum `
-             -ExtractZip $False `
-             -ExtractInSupportRoot $False
-
-    Get-Tool -ToolName "HQDFM" `
-             -Url $hqdfmDownload `
-             -DestPath (Join-Path -Path $desthqPlugin -ChildPath $hqdfmPluginName) `
-             -DownloadPath (Join-Path -Path $BuilderPaths.DownloadsRoot -ChildPath "$hqdfmPluginName.zip") `
-             -Checksum $hqdfmChecksum `
-             -ExtractZip $False `
-             -ExtractInSupportRoot $False
-    
+       
     if( $buildType -eq 'Debug' )
     {
         $vcpkgInstalledRoot = Join-Path -Path $vcpkgInstalledRoot -ChildPath "debug"
