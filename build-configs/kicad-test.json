@@ -9,7 +9,7 @@
     },
     "sources": {
         "kicad": {
-            "ref": "branch/hq-kicad-8.0.4"
+            "ref": "branch/feat/ime_reg"
         },
         "symbols": {
             "ref": "tag/8.0.4"
