@@ -188,8 +188,8 @@ $vswhereDownload = 'https://github.com/microsoft/vswhere/releases/download/2.8.4
 $vswhereChecksum = "E50A14767C27477F634A4C19709D35C27A72F541FB2BA5C3A446C80998A86419"
 
 $swigwinFolder = "swigwin-4.1.1"
-$swigwinDownload = "https://sourceforge.net/projects/swig/files/swigwin/$swigwinFolder/$swigwinFolder.zip/download?use_mirror=pilotfiber"
-$swigwinChecksum = "2EC3107E24606DB535D77EF3DBF246DC6ECCBF1D5C868DCE365D7F7FB19A1A51"
+$swigwinDownload = "https://github.com/user-attachments/files/16921684/swigwin-4.1.1.zip"
+$swigwinChecksum = "5af8dc2df5eb4d38663d875d035cd4868f08c43a6100edfbd8d6ae53d61ae1b9"
 
 $nsisFolderName = "nsis-3.08"
 $nsisDownload = "https://sourceforge.net/projects/nsis/files/NSIS%203/3.08/nsis-3.08.zip/download"
